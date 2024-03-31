@@ -1,0 +1,18 @@
+-- database: c:\Users\User\Documents\databases\myDb.db
+-- Use the ▷ button in the top right corner to run the entire file.
+WITH RECURSIVE
+    dates (date) AS (
+        VALUES
+            ('2015-10-03')
+        UNION ALL
+        SELECT
+            date(date, '+1 day')
+        FROM
+            dates
+        WHERE
+            date < '2015-11-01'
+    )
+SELECT
+    date
+FROM
+    dates;

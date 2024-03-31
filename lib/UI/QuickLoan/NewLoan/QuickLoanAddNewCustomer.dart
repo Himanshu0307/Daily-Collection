@@ -1,0 +1,313 @@
+import 'package:daily_collection/Models/SQL%20Entities/QuickLoanModel.dart';
+import 'package:daily_collection/UI/Component/CustomerSearchnew.dart';
+import 'package:daily_collection/UI/Component/TextFieldForm.dart';
+import 'package:flutter/material.dart';
+
+import '../../../Models/PostResponse.dart';
+import '../../../Services/SqlService.dart';
+import '../../Component/CalendarPicker.dart';
+
+class QuickLoanAddExistingCustomer extends StatefulWidget {
+  const QuickLoanAddExistingCustomer({super.key});
+
+  @override
+  State<QuickLoanAddExistingCustomer> createState() =>
+      _QuickLoanAddExistingCustomerState();
+}
+
+class _QuickLoanAddExistingCustomerState
+    extends State<QuickLoanAddExistingCustomer> {
+  late TextEditingController searchCustomer;
+  CustomerModel? _customerModel;
+  SQLService service = SQLService();
+
+  @override
+  void initState() {
+    super.initState();
+    searchCustomer = TextEditingController();
+  }
+
+  @override
+  void dispose() {
+    searchCustomer.dispose();
+    super.dispose();
+  }
+
+  void clear() {
+    setState(() {
+      _customerModel = null;
+      searchCustomer.clear();
+    });
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      children: [
+        Expanded(
+          flex: 1,
+          child: Flex(
+            direction: Axis.horizontal,
+            children: [
+              Expanded(
+                flex: 3,
+                child: TextFieldForm(
+                  "Enter Customer Name",
+                  controller: searchCustomer,
+                ),
+              ),
+              Expanded(
+                flex: 1,
+                child: ElevatedButton(
+                    onPressed: () async {
+                      CustomerModel? data = await showCustomerSearch(context,
+                          initialValue: searchCustomer.text,
+                          onChanged: service.searchCustomerForLoan);
+                      if (data != null) {
+                        setState(() {
+                          _customerModel = data;
+                        });
+                      }
+                    },
+                    child: const Text("Search Customer")),
+              )
+            ],
+          ),
+        ),
+        Expanded(
+            flex: 4,
+            child: _customerModel == null
+                ? const SizedBox()
+                : QuickLoanExistingCustomerForm(
+                    customerModel: _customerModel, clear: clear))
+      ],
+    );
+  }
+}
+
+class QuickLoanExistingCustomerForm extends StatefulWidget {
+  final CustomerModel _customerModel;
+  final Function clear;
+  const QuickLoanExistingCustomerForm(
+      {super.key, required customerModel, required this.clear})
+      : _customerModel = customerModel;
+
+  @override
+  State<QuickLoanExistingCustomerForm> createState() =>
+      _QuickLoanExistingCustomerFormState();
+}
+
+class _QuickLoanExistingCustomerFormState
+    extends State<QuickLoanExistingCustomerForm> {
+  SQLService service = SQLService();
+  GlobalKey<FormState> formstate = GlobalKey<FormState>();
+
+  late CustomerModel _customerModel;
+  late TextEditingController _controller;
+  late LoanModel _loanModel;
+  bool isFetching = false;
+
+  Future<PostResponse?> saveLoan() async {
+    if (!formstate.currentState!.validate()) {
+      return null;
+    }
+    _loanModel.customer = _customerModel;
+    _loanModel.cid = _customerModel.id!;
+    return await service.saveLoan(_loanModel);
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    _customerModel = widget._customerModel;
+    _loanModel = LoanModel();
+    _controller = TextEditingController();
+  }
+
+  @override
+  void dispose() {
+    _controller.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Form(
+      key: formstate,
+      child: SingleChildScrollView(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Flex(
+                direction: Axis.horizontal,
+                children: [
+                  Expanded(
+                      child: Text("Customer Name: ${_customerModel.name}")),
+                  Expanded(
+                    flex: 1,
+                    child: Text(
+                      "Mobile Number: ${_customerModel.mobile}",
+                    ),
+                  ),
+                  Expanded(
+                    child: Text("ID: ${_customerModel.aadhar}"),
+                  ),
+                  Expanded(
+                    child: Text(
+                      "Father's Name: ${_customerModel.father}",
+                    ),
+                  ),
+                ],
+              ),
+            ),
+            Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Text("Address: ${_customerModel.address}",
+                  textAlign: TextAlign.start),
+            ),
+            Flex(
+              direction: Axis.horizontal,
+              children: [
+                Expanded(
+                  child: TextFieldForm(
+                    "Witness Name",
+                    onChanged: (value) {
+                      _loanModel.witnessName = value;
+                    },
+                  ),
+                ),
+                Expanded(
+                  child: TextFieldForm(
+                    "Witness Mobile",
+                    onChanged: (value) {
+                      _loanModel.witnessMobile = value;
+                    },
+                  ),
+                ),
+                Expanded(
+                  child: TextFieldForm(
+                    "Witness Address",
+                    onChanged: (value) {
+                      _loanModel.witnessAddress = value;
+                    },
+                  ),
+                )
+              ],
+            ),
+            Row(
+              children: [
+                Expanded(
+                    flex: 1,
+                    child: TextFieldForm(
+                      "Loan Amount",
+                      required: true,
+                      onChanged: (value) {
+                        _loanModel.amount = int.tryParse(value) ?? 0;
+                      },
+                    )),
+                Expanded(
+                  flex: 1,
+                  child: TextFieldForm(
+                    "Installement Amount",
+                    validator: (_) {
+                      if (_loanModel.amount! > _loanModel.agreedAmount!) {
+                        return "Agreed Amount should not be less than Loan Amount";
+                      }
+                      return null;
+                    },
+                    onChanged: (value) {
+                      _loanModel.installement = int.tryParse(value) ?? 0;
+                      setState(() {
+                        _loanModel.agreedAmountSetter = "";
+                      });
+                    },
+                    required: true,
+                  ),
+                ),
+                Expanded(
+                    child: TextFieldForm("No of Days", onChanged: (value) {
+                  _loanModel.days = int.tryParse(value) ?? 0;
+                  setState(() {
+                    _loanModel.endDateSetter = "";
+                    _loanModel.agreedAmountSetter = "";
+                  });
+                })),
+                Expanded(
+                  flex: 1,
+                  child: TextFieldForm(
+                    _loanModel.agreedAmount?.toString() ?? "Agreement Amount",
+                    enabled: false,
+                    required: _loanModel.agreedAmount != null ? false : true,
+                  ),
+                ),
+              ],
+            ),
+            Row(
+              children: [
+                Expanded(
+                  child: CalendarPicker(
+                    "Loan Start Date",
+                    (date) {
+                      _loanModel.startDate = date;
+                      _loanModel.endDateSetter = "";
+                      if (_loanModel.endDate != null) {
+                        _controller.text = _loanModel.endDate!;
+                      }
+                    },
+                  ),
+                ),
+                Expanded(
+                  child: TextFieldForm(
+                   "Loan Close Date",
+                    controller: _controller,
+                    enabled: false,
+                  ),
+                )
+              ],
+            ),
+            TextFieldForm(
+              "Remark",
+              onChanged: (value) {
+                _loanModel.remark = value;
+              },
+            ),
+            Row(
+              children: [
+                Expanded(
+                  child: Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: ElevatedButton(
+                        onPressed: isFetching
+                            ? null
+                            : () async {
+                                var saveData = await saveLoan();
+                                ScaffoldMessenger.of(context).clearSnackBars();
+                                ScaffoldMessenger.of(context).showSnackBar(
+                                    SnackBar(
+                                        content: Text(saveData!.success
+                                            ? saveData.msg
+                                            : saveData.error)));
+                                if (saveData.success) widget.clear();
+                              },
+                        child: const Text("Add Loan")),
+                  ),
+                ),
+                Expanded(
+                  child: Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: ElevatedButton(
+                        onPressed: () => widget.clear(),
+                        child: const Text("Clear")),
+                  ),
+                ),
+              ],
+            )
+          ],
+        ),
+      ),
+    );
+  }
+}
