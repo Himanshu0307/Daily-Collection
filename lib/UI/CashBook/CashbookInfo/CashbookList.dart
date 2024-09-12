@@ -4,7 +4,7 @@ import 'package:daily_collection/UI/Component/CalendarPicker.dart';
 import 'package:daily_collection/UI/Component/TableComponent.dart';
 import 'package:flutter/material.dart';
 
-import '../../Component/AutoCompleteWidget.dart';
+import '../../../component/ui/autocomplete.dart';
 
 class CashbookList extends StatefulWidget {
   const CashbookList({super.key});

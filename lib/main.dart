@@ -38,7 +38,7 @@ class MyApp extends StatelessWidget {
         CollectionScreen.routeName: (context) => CollectionScreen(),
         PartnerScreen.routeName: (context) => PartnerScreen()
       },
-      initialRoute: MainPageScreen.routeName,
+      initialRoute: "/",
     );
   }
 }

@@ -44,7 +44,7 @@ class MainScreenWidget extends StatelessWidget {
                     childAspectRatio: 4,
                     mainAxisSpacing: 60,
                     crossAxisSpacing: 30),
-                children: [...listItem.map((e) => ListItemWidget(e)).toList(),],
+                children: [...listItem.map((e) => ListItemWidget(e)),],
               ),
             ),
           ),

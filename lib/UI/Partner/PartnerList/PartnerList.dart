@@ -4,7 +4,6 @@ import 'package:flutter/material.dart';
 import 'package:daily_collection/Services/SqlService.dart';
 import 'package:daily_collection/UI/Component/TextFieldForm.dart';
 
-import '../../../Models/ListItem.dart';
 import '../../../Services/PartnerService.dart';
 import '../../Component/CalendarPicker.dart';
 

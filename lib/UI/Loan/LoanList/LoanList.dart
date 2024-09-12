@@ -76,12 +76,12 @@ class _LoanListState extends State<LoanList> {
                               });
                             }),
                       ),
-                      Expanded(
-                        flex: 10,
-                        child: TableComponent(getFilteredData
-                            .map((e) => e.toTableJson())
-                            .toList()),
-                      ),
+                      // Expanded(
+                      //   flex: 10,
+                      //   child: TableComponent(getFilteredData
+                      //       .map((e) => e.toTableJson())
+                      //       .toList()),
+                      // ),
                     ],
                   ),
                 );

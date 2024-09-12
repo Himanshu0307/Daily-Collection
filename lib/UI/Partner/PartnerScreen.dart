@@ -3,7 +3,7 @@ import 'package:daily_collection/UI/Partner/AddTransaction/PartnerTransaction.da
 import 'package:flutter/material.dart';
 
 import '../../Models/SideItem.dart';
-import '../Component/SideWidget.dart';
+import '../../component/side-menubar.dart/side-menu-screen.dart';
 import 'PartnerAdd/PartnerAddForm.dart';
 import 'PartnerList/PartnerList.dart';
 

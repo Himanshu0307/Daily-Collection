@@ -15,16 +15,12 @@ class PasswordManager {
   Future<bool> checkPassword(String password) async {
     String? storedPassword = await _storage.read(key: "HashPassword");
 
-    if (storedPassword != null) {
-     
-      var generated = CryptoGraphic.generateHex(password);
-      // print("input String Hash ${generated}");
-      // print("Stored String Hash ${storedPassword}");
-      return generated == storedPassword;
-    } else {
-      return false;
+   
+    var generated = CryptoGraphic.generateHex(password);
+    // print("input String Hash ${generated}");
+    // print("Stored String Hash ${storedPassword}");
+    return generated == storedPassword;
     }
-  }
 
   Future<bool> setPassword(String password) async {
     try {

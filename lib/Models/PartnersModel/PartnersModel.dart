@@ -12,7 +12,7 @@ class PartnerModel {
   PartnerModel(this.name, this.percentage);
 
   toJson() {
-    Map<String, dynamic?> map = {};
+    Map<String, dynamic> map = {};
     map["id"] = id;
     map["name"] = name;
     map["percentage"] = percentage;

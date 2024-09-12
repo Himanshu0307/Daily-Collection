@@ -92,7 +92,7 @@ class _LoanClosureWidgetState extends State<LoanClosureWidget> {
                 ? const Text("No Customer Selected")
                 : Column(
                     children: [
-                      CustomerInfoView(_loanModelCollection![0].customer),
+                      // CustomerInfoView(_loanModelCollection![0].customer),
                       LoanInfoView(_loanModelCollection, clearData, closeLoan)
                     ],
                   )

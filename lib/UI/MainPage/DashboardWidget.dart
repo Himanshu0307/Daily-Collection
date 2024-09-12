@@ -56,6 +56,11 @@ class _DashboardWidgetState extends State<DashboardWidget> {
                         child: Text(
                             "Total Received Amount: ${snap.data?.received}")),
                     // "Total Received Amount"))
+                    ElevatedButton(
+                        onPressed: () {},
+                        child:
+                            Text("Total InHand Amount: ${snap.data?.inHand}")),
+                    // "Total inHand Amount"))
 
                     ElevatedButton(
                         onPressed: () {

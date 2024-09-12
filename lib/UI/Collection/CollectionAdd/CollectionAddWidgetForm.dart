@@ -226,7 +226,7 @@ class LoanInfoView extends StatelessWidget {
                     Expanded(
                         child: TextFieldForm(
                       "Overdue",
-                      initialValue: x.overdue.toString(),
+                      // initialValue:?? x.overdue.toString(),
                       enabled: false,
                     )),
                   ],

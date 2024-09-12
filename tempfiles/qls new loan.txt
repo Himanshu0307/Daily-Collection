@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 
-import '../../../Models/PostResponse.dart';
-import '../../../Models/SQL Entities/QuickLoanModel.dart';
-import '../../../Services/SqlService.dart';
-import '../../Component/CalendarPicker.dart';
-import '../../Component/TextFieldForm.dart';
+import '../../Models/PostResponse.dart';
+import '../../Models/SQL Entities/QuickLoanModel.dart';
+import '../../Services/SqlService.dart';
+import '../Component/CalendarPicker.dart';
+import '../Component/TextFieldForm.dart';
 
 class QuickLoanAddForm extends StatefulWidget {
   const QuickLoanAddForm({super.key});

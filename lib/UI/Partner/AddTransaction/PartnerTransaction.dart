@@ -1,6 +1,6 @@
 import 'package:daily_collection/Models/PartnersModel/PartnersModel.dart';
 import 'package:daily_collection/Models/PostResponse.dart';
-import 'package:daily_collection/UI/Component/AutoCompleteWidget.dart';
+import 'package:daily_collection/component/ui/autocomplete.dart';
 import 'package:daily_collection/UI/Component/CalendarPicker.dart';
 import 'package:daily_collection/UI/Component/DropdownWIdget.dart';
 import 'package:flutter/material.dart';

@@ -122,20 +122,20 @@ class Reports extends StatelessWidget {
   Widget build(BuildContext context) {
     return Column(
       children: [
-        loanModel?.customer != null
-            ? Expanded(child: CustomerInfo(customer: loanModel!.customer))
-            : const SizedBox(),
-        loanModel != null
-            ? Expanded(
-                flex: 2,
-                child: LoanInfo(loanModel: loanModel!, onClear: onClear))
-            : const SizedBox(),
-        installementReportModel != null
-            ? Expanded(
-                child: InstallementReport(
-                installementReport: installementReportModel!,
-              ))
-            : const SizedBox(),
+        // loanModel?.customer != null
+        //     ? Expanded(child: CustomerInfo(customer: loanModel!.customer))
+        //     : const SizedBox(),
+        // loanModel != null
+        //     ? Expanded(
+        //         flex: 2,
+        //         child: LoanInfo(loanModel: loanModel!, onClear: onClear))
+        //     : const SizedBox(),
+        // installementReportModel != null
+        //     ? Expanded(
+        //         child: InstallementReport(
+        //         installementReport: installementReportModel!,
+        //       ))
+        //     : const SizedBox(),
       ],
     );
   }

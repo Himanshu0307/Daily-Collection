@@ -3,7 +3,7 @@ import 'package:daily_collection/UI/CashBook/CashbookInfo/CashbookList.dart';
 import 'package:flutter/material.dart';
 
 import '../../Models/SideItem.dart';
-import '../Component/SideWidget.dart';
+import '../../component/side-menubar.dart/side-menu-screen.dart';
 
 class CashBookScreen extends StatelessWidget {
   static const String routeName = "CashBookScreen";

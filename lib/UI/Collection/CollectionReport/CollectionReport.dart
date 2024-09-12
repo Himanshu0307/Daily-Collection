@@ -123,27 +123,27 @@ class Reports extends StatelessWidget {
   Widget build(BuildContext context) {
     return Column(
       children: [
-        loanModel?.customer != null
-            ? Expanded(child: CustomerInfo(customer: loanModel!.customer))
-            : const SizedBox(),
-        loanModel != null
-            ? Expanded(child: LoanInfo(loanModel: loanModel!))
-            : const SizedBox(),
-        installementReportModel != null
-            ? Expanded(
-                child: InstallementReport(
-                installementReport: installementReportModel!,
-              ))
-            : const SizedBox(),
-        items != null
-            ? Expanded(
-                flex: 5,
-                child: ListItems(
-                  items!,
-                  service: service,
-                  isClosed: loanModel?.status == 'Closed' ?? true,
-                ))
-            : const SizedBox()
+        // loanModel?.customer != null
+        //     ? Expanded(child: CustomerInfo(customer: loanModel!.customer))
+        //     : const SizedBox(),
+        // loanModel != null
+        //     ? Expanded(child: LoanInfo(loanModel: loanModel!))
+        //     : const SizedBox(),
+        // installementReportModel != null
+        //     ? Expanded(
+        //         child: InstallementReport(
+        //         installementReport: installementReportModel!,
+        //       ))
+        //     : const SizedBox(),
+        // items != null
+        //     ? Expanded(
+        //         flex: 5,
+        //         child: ListItems(
+        //           items!,
+        //           service: service,
+        //           isClosed: loanModel?.status == 'Closed' ?? true,
+        //         ))
+        //     : const SizedBox()
       ],
     );
   }
@@ -152,8 +152,7 @@ class Reports extends StatelessWidget {
 class InstallementReport extends StatelessWidget {
   final InstallementReportModel installementReport;
 
-  const InstallementReport(
-      {super.key, required this.installementReport});
+  const InstallementReport({super.key, required this.installementReport});
   @override
   Widget build(BuildContext context) {
     return Card(

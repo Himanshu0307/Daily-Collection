@@ -1,92 +1,53 @@
-import 'package:intl/intl.dart';
-
 class LoanModel {
   int? id;
-  int? amount;
-  int? agreedAmount;
-  int? installement;
-  int? days;
-  String? startDate;
-  String? endDate;
-  set endDateSetter(_) {
-    if (startDate != null && startDate!.isNotEmpty && days != null) {
-      var date =
-          DateFormat("yyyy-MM-dd").parse(startDate!).add(Duration(days: days!));
-      endDate = DateFormat("yyyy-MM-dd").format(date);
-    }
-  }
-
-  set agreedAmountSetter(_) {
-    if (installement != null && days != null) {
-      agreedAmount = installement! * days!;
-    }
-  }
-
+  int amount = 0;
+  int installement = 0;
+  int days = 0;
+  int agreedAmount = 0;
+  String startDate = "";
+  String endDate = "";
+  String disbursementDate = "";
   String? remark;
   String? witnessName;
   String? witnessMobile;
   String? witnessAddress;
-  String? status;
-  int? cid;
-  double? overdue;
-  CustomerModel? customer;
+  bool status = true;
+  int cid = 0;
 
   LoanModel.fromJson(Map<String, Object?> json) {
     try {
-      id = json["id"] as int;
-      amount = json["amount"] as int?;
+      id = json["id"] as int?;
+      amount = json["amount"] as int;
       agreedAmount = json["agreedAmount"] as int;
-      installement = json["installement"] as int?;
-      days = json["days"] as int?;
-      startDate = (json["startDate"] as String?);
-      endDate = json["endDate"] as String?;
+      installement = json["installement"] as int;
+      days = json["days"] as int;
+      startDate = (json["startDate"] as String);
+      endDate = json["endDate"] as String;
       remark = json["remark"] as String?;
       witnessName = json["witnessName"] as String?;
       witnessMobile = json["witnessMobile"] as String?;
       witnessAddress = json["witnessAddress"] as String?;
-      if (json["status"].runtimeType == int) {
-        status = json["status"] == 0 ? "Closed" : "Active";
-      }
-      if (json["status"].runtimeType == String) {
-        status = json["status"] as String?;
-      }
-      cid = json["cid"] as int?;
-      customer = CustomerModel(id: cid);
-      if (json.containsKey("customerName")) {
-        customer?.name = json["customerName"] as String?;
-      }
-      if (json.containsKey("mobile")) {
-        customer?.mobile = json["mobile"] as String?;
-      }
-      if (json.containsKey("aadhar")) {
-        customer?.aadhar = json["aadhar"] as String?;
-      }
-      if (json.containsKey("father")) {
-        customer?.father = json["father"] as String?;
-      }
-      if (json.containsKey("overdue")) {
-        overdue =
-            json["overdue"] as double < 0.0 ? 0.0 : json["overdue"] as double?;
-      }
-    } catch (e) {
-      print(e.toString());
-    }
+      status = true;
+      disbursementDate = json["disbursementDate"] as String;
+      cid = json["cid"] as int;
+    } catch (_) {}
   }
 
   LoanModel(
       {this.id,
-      this.amount,
-      this.agreedAmount,
-      this.installement,
-      this.days,
-      this.startDate,
-      this.endDate,
+      required this.amount,
+      required this.agreedAmount,
+      required this.installement,
+      required this.days,
+      required this.startDate,
+      required this.endDate,
+      required this.disbursementDate,
       this.remark,
       this.witnessName,
       this.witnessMobile,
       this.witnessAddress,
-      this.status,
-      this.cid});
+      required this.status,
+      required this.cid});
 
   Map<String, Object?> toMap() {
     return {
@@ -101,46 +62,49 @@ class LoanModel {
       "witnessName": witnessName,
       "witnessMobile": witnessMobile,
       "witnessAddress": witnessAddress,
-      "cid": cid
+      "cid": cid,
+      "disbursementDate": disbursementDate
     };
   }
 
-  Map<String, Object?> toTableJson() {
-    return {
-      "LoanId": id,
-      "CustomerId": cid,
-      "Name": customer?.name,
-      "Amount": amount,
-      "Agreed Amount": agreedAmount,
-      "Overdue": overdue,
-      "Installement": installement,
-      "Loan Tenure": days,
-      "Start Date": startDate,
-      "End Date": endDate,
-      "Remark": remark ?? "",
-      "Status": status,
-    };
-  }
+  // Map<String, Object?> toTableJson() {
+  //   return {
+  //     "LoanId": id,
+  //     "CustomerId": cid,
+  //     "Name": customer?.name,
+  //     "Amount": amount,
+  //     "Agreed Amount": agreedAmount,
+  //     "Overdue": overdue,
+  //     "Installement": installement,
+  //     "Loan Tenure": days,
+  //     "Start Date": startDate,
+  //     "End Date": endDate,
+  //     "Remark": remark ?? "",
+  //     "Status": status,
+  //   };
+  // }
 }
 
 class CustomerModel {
   int? id;
-  String? name;
-  String? address;
-  String? mobile;
-  String? aadhar;
-  String? father;
+  String name = "";
+  String mobile = "";
+  String address = "";
+  String aadhar = "";
+  String father = "";
   bool exist = false;
-  bool active = false;
+  bool? active = false;
 
   CustomerModel.fromJson(Map<String, Object?> map) {
     id = map["id"] as int?;
-    name = map["name"] as String?;
-    aadhar = map["aadhar"] as String?;
-    mobile = map["mobile"] as String?;
-    address = map["address"] as String?;
-    father = map["father"] as String?;
-    active = (map["active"] as int) == 1 ? true : false;
+    name = map["name"] as String;
+    aadhar = map["aadhar"] as String;
+    mobile = map["mobile"] as String;
+    address = map["address"] as String;
+    father = map["father"] as String;
+    if (map.containsKey("active")) {
+      active = (map["active"] as int) == 1 ? true : false;
+    }
   }
 
   Map<String, Object?> toMap() {
@@ -156,11 +120,11 @@ class CustomerModel {
 
   CustomerModel(
       {this.id,
-      this.name,
-      this.mobile,
-      this.address,
-      this.aadhar,
-      this.father});
+      required this.name,
+      required this.mobile,
+      required this.address,
+      required this.aadhar,
+      required this.father});
 }
 
 class CollectionModel {
@@ -191,6 +155,7 @@ class DashboardModel {
   double? totalamt = 0;
   double? agreed = 0;
   double? received = 0;
+  double? inHand = 0;
 
   DashboardModel.fromJson(Map<String, Object?> map) {
     totalcase = map["totalcase"] as int?;
@@ -199,6 +164,7 @@ class DashboardModel {
     totalamt = map["totalamt"] as double?;
     agreed = map["agreed"] as double?;
     received = map["received"] as double?;
+    inHand = map["inHand"] as double?;
   }
 
   // Map<String, Object?> toMap() {
@@ -242,5 +208,19 @@ class DateWiseCollectionReportModel {
     amount = map["amount"] as int? ?? 0;
     name = map["name"] as String? ?? "";
     collectionDate = map["collectionDate"] as String? ?? "";
+  }
+}
+
+class DateWiseTransactionReportModel {
+  late double amount;
+  late String to;
+  late String date;
+  late String type;
+
+  DateWiseTransactionReportModel.fromJson(Map<String, Object?> map) {
+    amount = map["amount"] as double? ?? 0.0;
+    to = map["to"] as String? ?? "";
+    date = map["date"] as String? ?? "";
+    type = map["type"] as String? ?? "";
   }
 }

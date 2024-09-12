@@ -1,9 +1,10 @@
 import 'package:daily_collection/UI/Collection/DateWiseCollection/DateWiseCollection.dart';
+import 'package:daily_collection/UI/Collection/TransactionReport/TransactionReport.dart';
 import 'package:flutter/material.dart';
 import 'package:daily_collection/UI/Collection/LoanClosure/LoanClosure.dart';
 
 import '../../Models/SideItem.dart';
-import '../Component/SideWidget.dart';
+import '../../component/side-menubar.dart/side-menu-screen.dart';
 import 'CollectionAdd/CollectionAddWidgetForm.dart';
 import 'CollectionReport/CollectionReport.dart';
 
@@ -19,6 +20,7 @@ class CollectionScreen extends StatelessWidget {
     SideItem("Add Collection", Icons.add),
     SideItem("Collection Report A/c Loan ID", Icons.edit_document),
     SideItem("Collection Report A/c Date", Icons.calendar_month_outlined),
+    SideItem("Transaction Report A/c Date", Icons.calendar_month_outlined),
     // SideItem("Loan Closure", Icons.delete)
   ];
   @override
@@ -37,7 +39,7 @@ class CollectionScreen extends StatelessWidget {
                 CollectionAddWidgetForm(),
                 CollectionReport(),
                 DateWiseCollectionReport(),
-                LoanClosureWidget(),
+                TransactionReportDateWise(),
               ],
             )),
       ],

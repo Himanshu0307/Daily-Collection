@@ -1,10 +1,10 @@
 import 'package:daily_collection/UI/QuickLoan/DateWiseLoan/DateWiseLoanReport.dart';
 import 'package:daily_collection/UI/QuickLoan/LoanInfo/LoanReport.dart';
-import 'package:daily_collection/UI/QuickLoan/NewLoan/QuickLoanScreen.dart';
+import 'package:daily_collection/app/qls/add-loan/quickloan-screen.dart';
 import 'package:flutter/material.dart';
 
 import '../../Models/SideItem.dart';
-import '../Component/SideWidget.dart';
+import '../../component/side-menubar.dart/side-menu-screen.dart';
 
 class QuickLoanMainScreen extends StatelessWidget {
   static const String routeName = "QuickLoanMainScreen";

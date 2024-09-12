@@ -47,18 +47,18 @@ class _CustomerAddWidgetFormState extends State<CustomerAddWidgetForm> {
 
   Future<void> SaveCustomer(Function(String msg) showSnackBar) async {
     if (!formstate.currentState!.validate()) return;
-    CustomerModel customerModel = CustomerModel();
+    // CustomerModel customerModel = CustomerModel();
 
-    customerModel.name = name.text.toUpperCase();
-    customerModel.mobile = mobile.text;
-    customerModel.address = address.text;
-    customerModel.aadhar = aadhar.text;
-    customerModel.father = father.text;
-    var status = await service.saveCustomer(customerModel);
-    if (status.success) {
-      showSnackBar(status.msg);
-      formstate.currentState!.reset();
-    } else if (status.success == false) showSnackBar(status.error);
+    // customerModel.name = name.text.toUpperCase();
+    // customerModel.mobile = mobile.text;
+    // customerModel.address = address.text;
+    // customerModel.aadhar = aadhar.text;
+    // customerModel.father = father.text;
+    // var status = await service.saveCustomer(customerModel);
+    //   if (status.success) {
+    //     showSnackBar(status.msg);
+    //     formstate.currentState!.reset();
+    //   } else if (status.success == false) showSnackBar(status.error);
   }
 
   GlobalKey<FormState> formstate = GlobalKey<FormState>();

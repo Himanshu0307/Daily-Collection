@@ -63,22 +63,28 @@ class PartnerService {
   }
 
   Future<PartnersReport?> getPartnerReport(int partnerId, String date) async {
-    if (database == null) throw ("Partner Database Not found");
-    // print(date);
-    // print(partnerId);
-    var data = await database?.rawQuery('''
-    With loanc as (SELECT total(amount) as loanAmt from Loan WHERE date(Loan.startDate)<=date("${date}")),
+    try {
+      if (database == null) throw ("Partner Database Not found");
+      // print(date);
+      // print(partnerId);
+      var data = await database?.rawQuery('''
+With loanc as (SELECT total(amount) as loanAmt from Loan WHERE date(Loan.startDate)<=date("${date}")),
     coll as (SELECT total(amount)  as collAmt from Collection where date(collectionDate)<=date("${date}")),
     partnert as (SELECT 
     (SELECT total(amount) FROM PartnerTransaction where type=="DR" and partnerId=${partnerId} and PartnerTransaction.date<=date("${date}")) as totalDr,
     (SELECT total(amount) FROM PartnerTransaction where type=="CR" and partnerId=${partnerId} and PartnerTransaction.date<=date("${date}")) as totalCr
-    )
-    select Partner.name, totalCr,totalDr,loanAmt,collAmt, ((collAmt-loanAmt)*(Partner.percentage*0.01) ) -totalDr +totalCr as finalAmount from loanc,coll,partnert,Partner where Partner.id=${partnerId};
+    ),
+    configs as (Select cast([value] as double) as [value] from Config where id =1)
+    select Partner.name, totalCr,totalDr,loanAmt,collAmt, ((collAmt-loanAmt-[value])*(Partner.percentage*0.01) ) -totalDr +totalCr as finalAmount from loanc,coll,partnert,Partner,configs where Partner.id=${partnerId};
     ''');
 
-    if (data == null || data.isEmpty) return null;
-    // print(data);
-    return data.map((e) => PartnersReport.fromJson(e)).firstOrNull!;
+      if (data == null || data.isEmpty) return null;
+      // print(data);
+      return data.map((e) => PartnersReport.fromJson(e)).firstOrNull!;
+    } catch (e) {
+      print(e);
+      return null;
+    }
   }
 
   Future<List<PartnerTransaction>?> getPartnerTransactions(
