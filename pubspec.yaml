@@ -44,6 +44,8 @@ dependencies:
   path: ^1.8.3
   reactive_forms: ^17.0.1
   flutter_typeahead: ^5.2.0
+  toastification: ^2.2.0
+  syncfusion_flutter_datagrid: ^26.2.14
 
 dev_dependencies:
   flutter_test:

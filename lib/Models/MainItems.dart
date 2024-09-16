@@ -5,7 +5,7 @@ import 'package:flutter/material.dart';
 
 import '../UI/Collection/CollectionScreen.dart';
 import '../UI/Customer/CustomerScreen.dart';
-import '../UI/Loan/LoanScreen.dart';
+import '../app/summary/loan-screen.dart';
 
 class MainItems {
   final IconData icon;

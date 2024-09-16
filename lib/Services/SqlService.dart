@@ -86,18 +86,18 @@ END;
     return Future.value(customer);
   }
 
-  // Get Customer from LoanId
-  Future<LoanModel?> getLoanModelFromLoanId(int? loanId) async {
-    if (database == null) throw Exception("No database found");
-    if (loanId == null) return null;
-    var data = await database?.rawQuery('''
-      Select c.name as customerName,c.mobile,c.aadhar,c.father,Loan.* from Loan INNER JOIN Customer c on c.id=Loan.cid 
-    where Loan.id=$loanId;
-    ''');
-    if (data == null || data.isEmpty) return null;
+  // // Get Customer from LoanId
+  // Future<LoanModel?> getLoanModelFromLoanId(int? loanId) async {
+  //   if (database == null) throw Exception("No database found");
+  //   if (loanId == null) return null;
+  //   var data = await database?.rawQuery('''
+  //     Select c.name as customerName,c.mobile,c.aadhar,c.father,Loan.* from Loan INNER JOIN Customer c on c.id=Loan.cid
+  //   where Loan.id=$loanId;
+  //   ''');
+  //   if (data == null || data.isEmpty) return null;
 
-    return LoanModel.fromJson(data.first);
-  }
+  //   return LoanModel.fromJson(data.first);
+  // }
 
   // Get Customer and all Active Loan Status
   Future<List<LoanModel>?> getCustomerAndLoanInfo(String name) async {
@@ -498,7 +498,6 @@ order by [date] DESC;
       // transaction to save customer then loan
       await database?.transaction((txn) async {
         var loan = LoanModel.fromJson(value);
-        print(loan.toMap());
         var data = await txn.insert("Loan", loan.toMap(),
             conflictAlgorithm: ConflictAlgorithm.rollback);
         if (data == 0) {
@@ -514,7 +513,7 @@ order by [date] DESC;
     }
   }
 
-  Future<PostResponse> deleteLoan(int? loanId) async {
+  Future<dynamic> deleteLoan(int? loanId) async {
     if (database == null) throw Exception("No database found");
     if (loanId == null) return PostResponse(false, error: "Loan Not found");
     try {
@@ -523,12 +522,12 @@ order by [date] DESC;
       ''') ?? 0;
 
       if (value > 0) {
-        return PostResponse(true, msg: "Loan Deleted Successfully");
+        return {"message": "Loan Deleted Successfully", "success": true};
       } else {
-        return PostResponse(false, error: "Failed to Delete");
+        return {"message": "Failed to Delete", "success": false};
       }
     } catch (e) {
-      return PostResponse(false, error: "Failed to Delete Loan");
+      return {"message": "Failed to Delete", "success": false};
     }
   }
 
@@ -565,5 +564,52 @@ order by [date] DESC;
     if (data == null || data.isEmpty) return null;
 
     return data.map((e) => CustomerModel.fromJson(e)..exist = true).toList();
+  }
+
+  // Get Loan Report from Loan ID
+
+  Future<dynamic> getLoanReportFromId(int loanId) async {
+    if (database == null) throw Exception("No database found");
+    // fix: get all three insformation i.e customer, loan. and transaction
+
+    var loan = await database?.rawQuery('''
+      Select * from loan where id=$loanId;
+    ''');
+    if (loan == null || loan.isEmpty) {
+      return {"success": false, "message": "Loan does not exist"};
+    }
+    var customer = await database?.rawQuery('''
+     SELECT c.* FROM Loan l
+      inner join customer c on l.cid=c.id 
+      where l.id=${loan.first["id"]};s
+    ''');
+    var transaction = await database?.rawQuery('''
+      Select
+    total(c.amount) as received,
+    l.agreedAmount-total(c.amount)  as remaining,
+    (
+        min(
+          (
+              JULIANDAY(date()) - JULIANDAY(date(l.startDate)) + 1
+          ) * l.installement,
+          l.agreedAmount
+        )
+    )- total(c.amount)  as overdue,
+    max(date(c.collectionDate)) as lastCollection
+    from
+        Loan l
+        left join Collection c on l.id = c.loanId
+    where
+    l.id =${loan.first["id"]};
+    ''');
+    LoanReportIdModel model = LoanReportIdModel();
+    model.customerModel = CustomerModel.fromJson(customer!.first);
+    model.loanModel = LoanModel.fromJson(loan.first);
+    model.reportModel = transaction != null
+        ? InstallementReportModel.fromJson(transaction.first)
+        : null;
+    return {"data": model, "success": true};
+
+    //   return LoanModel.fromJson(data.first);
   }
 }

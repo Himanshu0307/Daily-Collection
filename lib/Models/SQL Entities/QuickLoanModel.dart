@@ -224,3 +224,10 @@ class DateWiseTransactionReportModel {
     type = map["type"] as String? ?? "";
   }
 }
+
+class LoanReportIdModel{
+  late LoanModel loanModel;
+  late CustomerModel customerModel;
+  late InstallementReportModel? reportModel;
+  
+}

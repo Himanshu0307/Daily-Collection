@@ -66,13 +66,13 @@ class _CollectionReportState extends State<CollectionReport> {
                     if (result == null || result.isEmpty) {
                       showSnackBar(context, "No Data Found");
                     } else {
-                      _loanModel = await service.getLoanModelFromLoanId(
-                          int.tryParse(loanIdSearch.text));
-                      _installementReportModel = await service
-                          .getInstallementCard(int.tryParse(loanIdSearch.text));
-                      setState(() {
-                        _list = result;
-                      });
+                      // _loanModel = await service.getLoanModelFromLoanId(
+                      //     int.tryParse(loanIdSearch.text));
+                      // _installementReportModel = await service
+                      //     .getInstallementCard(int.tryParse(loanIdSearch.text));
+                      // setState(() {
+                      //   _list = result;
+                      // });
                     }
                   }),
             )),

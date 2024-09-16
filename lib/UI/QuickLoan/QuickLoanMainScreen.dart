@@ -1,5 +1,5 @@
 import 'package:daily_collection/UI/QuickLoan/DateWiseLoan/DateWiseLoanReport.dart';
-import 'package:daily_collection/UI/QuickLoan/LoanInfo/LoanReport.dart';
+import 'package:daily_collection/app/qls/get-loan/loan-report.dart';
 import 'package:daily_collection/app/qls/add-loan/quickloan-screen.dart';
 import 'package:flutter/material.dart';
 

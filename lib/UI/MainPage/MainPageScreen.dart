@@ -12,17 +12,11 @@ class MainPageScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    try {
-      SQLService.initializeDb();
-      CashBookService.initializeDb();
-      return Scaffold(
-        body: MainScreenWidget(),
-      );
-    } on Exception catch (e) {
-      ScaffoldMessenger.of(context)
-          .showSnackBar(SnackBar(content: Text(e.toString())));
-      return const Scaffold();
-    }
+    SQLService.initializeDb();
+    CashBookService.initializeDb();
+    return Scaffold(
+      body: MainScreenWidget(),
+    );
   }
 }
 
@@ -44,7 +38,9 @@ class MainScreenWidget extends StatelessWidget {
                     childAspectRatio: 4,
                     mainAxisSpacing: 60,
                     crossAxisSpacing: 30),
-                children: [...listItem.map((e) => ListItemWidget(e)),],
+                children: [
+                  ...listItem.map((e) => ListItemWidget(e)),
+                ],
               ),
             ),
           ),
