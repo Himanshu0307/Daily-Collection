@@ -11,18 +11,16 @@ class ReportsWidget extends StatelessWidget {
   const ReportsWidget({super.key, required this.info, required this.onClear});
   @override
   Widget build(BuildContext context) {
-    return Column(
-      children: [
-        Expanded(flex: 2, child: CustomerCard(customer: info.customerModel)),
-        Expanded(
-            flex: 3,
-            child: LoanCard(loanModel: info.loanModel, onClear: onClear)),
-        Expanded(
-            flex: 2,
-            child: InstallementCard(
-              installementReport: info.reportModel,
-            ))
-      ],
+    return SingleChildScrollView(
+      child: Column(
+        children: [
+          CustomerCard(customer: info.customerModel),
+          LoanCard(loanModel: info.loanModel, onClear: onClear),
+          InstallementCard(
+            installementReport: info.reportModel,
+          )
+        ],
+      ),
     );
   }
 }

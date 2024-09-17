@@ -231,3 +231,39 @@ class LoanReportIdModel{
   late InstallementReportModel? reportModel;
   
 }
+
+
+class LoanReportModel{
+   final String? sn;
+  final String? loanId;
+  final String? customerId;
+  final String? customerName;
+  final String? overdue;
+  final String? amount;
+  final String? installement;
+  final String? days;
+  final String? agreedAmount;
+  final String? startDate;
+  final String? endDate;
+  final String? disbursementDate;
+  final String? remark;
+  final String? witnessName;
+  final String? status;
+  const LoanReportModel({
+    this.sn,
+    this.loanId,
+    this.customerId,
+    this.customerName,
+    this.overdue,
+    this.amount,
+    this.installement,
+    this.days,
+    this.agreedAmount,
+    this.startDate,
+    this.endDate,
+    this.disbursementDate,
+    this.remark,
+    this.witnessName,
+    this.status,
+  });
+}

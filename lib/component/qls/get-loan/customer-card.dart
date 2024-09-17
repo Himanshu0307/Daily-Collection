@@ -12,7 +12,7 @@ class CustomerCard extends StatelessWidget {
     return Card(
       child: Padding(
         padding: const EdgeInsets.all(8.0),
-        child: Wrap(spacing: 20, children: [
+        child: Wrap(spacing: 20, runSpacing: 20, children: [
           ConstraintUI(child: Text("Customer Id: ${_customer.id}")),
           ConstraintUI(child: Text("Customer Name: ${_customer.name}")),
           ConstraintUI(child: Text("Mobile: ${_customer.mobile}")),
