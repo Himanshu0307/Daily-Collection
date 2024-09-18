@@ -612,4 +612,69 @@ order by [date] DESC;
 
     //   return LoanModel.fromJson(data.first);
   }
+
+  // Get Loan Information as per loan Status
+
+  Future<dynamic> getLoanListfromStatus(String status) async {
+    if (status == "all") {
+      var loanInfo = await database?.rawQuery('''
+     SELECT l.*,c.name as customerName,total(col.amount) as received,
+      (
+              min(
+                (
+                    JULIANDAY(date()) - JULIANDAY(date(l.startDate)) + 1
+                ) * l.installement,
+                l.agreedAmount
+              )
+      )- total(col.amount)  as overdue
+      FROM Loan l
+      inner join Customer c on c.id=l.cid 
+      left join Collection col on col.loanId=l.id
+      GROUP by l.id ;
+    ''');
+      return {"success": true, "data": loanInfo};
+    }
+
+    // if loan status is active
+    else if (status == "active") {
+      var loanInfo = await database?.rawQuery('''
+     SELECT l.*,c.name as customerName,total(col.amount) as received,
+      (
+              min(
+                (
+                    JULIANDAY(date()) - JULIANDAY(date(l.startDate)) + 1
+                ) * l.installement,
+                l.agreedAmount
+              )
+      )- total(col.amount)  as overdue
+      FROM Loan l
+      inner join Customer c on c.id=l.cid 
+      left join Collection col on col.loanId=l.id
+      where l.status=true
+      GROUP by l.id ;
+    ''');
+      return {"success": true, "data": loanInfo};
+    }
+
+    // if loan status is closed
+    else {
+      var loanInfo = await database?.rawQuery('''
+     SELECT l.*,c.name as customerName,total(col.amount) as received,
+      (
+              min(
+                (
+                    JULIANDAY(date()) - JULIANDAY(date(l.startDate)) + 1
+                ) * l.installement,
+                l.agreedAmount
+              )
+      )- total(col.amount)  as overdue
+      FROM Loan l
+      inner join Customer c on c.id=l.cid 
+      left join Collection col on col.loanId=l.id
+      where l.status=false
+      GROUP by l.id ;
+    ''');
+      return {"success": true, "data": loanInfo};
+    }
+  }
 }

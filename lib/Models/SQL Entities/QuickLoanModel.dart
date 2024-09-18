@@ -225,45 +225,59 @@ class DateWiseTransactionReportModel {
   }
 }
 
-class LoanReportIdModel{
+class LoanReportIdModel {
   late LoanModel loanModel;
   late CustomerModel customerModel;
   late InstallementReportModel? reportModel;
-  
 }
 
-
-class LoanReportModel{
-   final String? sn;
-  final String? loanId;
-  final String? customerId;
+class LoanReportModel {
+  final int? loanId;
+  final int? customerId;
   final String? customerName;
-  final String? overdue;
-  final String? amount;
-  final String? installement;
-  final String? days;
-  final String? agreedAmount;
+  final double? overdue;
+  final int? amount;
+  final int? installement;
+  final int? days;
+  final int? agreedAmount;
   final String? startDate;
   final String? endDate;
   final String? disbursementDate;
   final String? remark;
   final String? witnessName;
-  final String? status;
-  const LoanReportModel({
-    this.sn,
-    this.loanId,
-    this.customerId,
-    this.customerName,
-    this.overdue,
-    this.amount,
-    this.installement,
-    this.days,
-    this.agreedAmount,
-    this.startDate,
-    this.endDate,
-    this.disbursementDate,
-    this.remark,
-    this.witnessName,
-    this.status,
-  });
+  final bool? status;
+  final double? received;
+  const LoanReportModel(
+      {this.loanId,
+      this.customerId,
+      this.customerName,
+      this.overdue,
+      this.amount,
+      this.installement,
+      this.days,
+      this.agreedAmount,
+      this.startDate,
+      this.endDate,
+      this.disbursementDate,
+      this.remark,
+      this.witnessName,
+      this.status,
+      this.received});
+
+  LoanReportModel.fromJson(Map<String, Object?> data)
+      : loanId = data['id'] as int?,
+        customerId = data['cid'] as int?,
+        customerName = data['customerName'] as String?,
+        overdue = data['overdue'] as double?,
+        amount = data['amount'] as int?,
+        installement = data['installement'] as int?,
+        days = data['days'] as int?,
+        agreedAmount = data['agreedAmount'] as int?,
+        startDate = data['startDate'] as String?,
+        endDate = data['endDate'] as String?,
+        disbursementDate = data['disbursementDate'] as String?,
+        remark = data['remark'] as String?,
+        witnessName = data['witnessName'] as String?,
+        status = (data['status'] as int) == 1,
+        received = data['received'] as double?;
 }
