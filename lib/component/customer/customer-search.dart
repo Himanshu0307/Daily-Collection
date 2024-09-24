@@ -3,7 +3,6 @@ import 'package:daily_collection/Services/SqlService.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_typeahead/flutter_typeahead.dart';
 
-
 class CustomerSearchField extends StatelessWidget {
   CustomerSearchField({super.key, required this.onSelected});
   final bool allowAnonymousSearch = true;

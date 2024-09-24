@@ -196,18 +196,20 @@ class InstallementReportModel {
 }
 
 class DateWiseCollectionReportModel {
-  late int cid;
+  late int customerId;
   late int loanId;
   late int amount;
-  late String name;
-  late String collectionDate;
+  late String customerName;
+  late String startDate;
+  late String disbursementDate;
 
   DateWiseCollectionReportModel.fromJson(Map<String, Object?> map) {
-    cid = map["cid"] as int? ?? 0;
+    customerId = map["customerId"] as int? ?? 0;
     loanId = map["loanId"] as int? ?? 0;
     amount = map["amount"] as int? ?? 0;
-    name = map["name"] as String? ?? "";
-    collectionDate = map["collectionDate"] as String? ?? "";
+    customerName = map["customerName"] as String? ?? "";
+    startDate = map["startDate"] as String? ?? "";
+    disbursementDate = map["disbursementDate"] as String? ?? "";
   }
 }
 
@@ -280,4 +282,11 @@ class LoanReportModel {
         witnessName = data['witnessName'] as String?,
         status = (data['status'] as int) == 1,
         received = data['received'] as double?;
+}
+
+
+class TransactionReportModel{
+     List<LoanModel> loanModel=[];
+  late CustomerModel customerModel;
+
 }

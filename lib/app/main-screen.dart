@@ -1,10 +1,10 @@
 import 'package:daily_collection/Services/Cashbook.dart';
 import 'package:flutter/material.dart';
 
-import '../../Models/MainItems.dart';
-import '../../Services/SqlService.dart';
-import 'DashboardWidget.dart';
-import 'ListItemWidget.dart';
+import '../Models/MainItems.dart';
+import '../Services/SqlService.dart';
+import '../component/main-screen/dashboard-widget.dart';
+import '../UI/MainPage/ListItemWidget.dart';
 
 class MainPageScreen extends StatelessWidget {
   const MainPageScreen({super.key});
@@ -26,7 +26,7 @@ class MainScreenWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Column(
+    return Row(
       children: [
         Expanded(
           child: Center(

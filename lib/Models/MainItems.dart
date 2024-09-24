@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 
 import '../UI/Collection/CollectionScreen.dart';
 import '../UI/Customer/CustomerScreen.dart';
+import '../app/collection/collection-screen.dart';
 import '../app/summary/loan-screen.dart';
 
 class MainItems {

@@ -3,7 +3,7 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 
 import '../../Models/SideItem.dart';
-import '../../UI/MainPage/MainPageScreen.dart';
+import '../../app/main-screen.dart';
 
 class SideWidget extends StatefulWidget {
   final List<SideItem> items;

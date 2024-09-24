@@ -1,10 +1,11 @@
-import 'package:daily_collection/component/customer/customer-search.dart';
 import 'package:flutter/material.dart';
-import 'package:daily_collection/Models/SQL%20Entities/QuickLoanModel.dart';
 
 import '../../../Models/PostResponse.dart';
+import '../../../Models/SQL Entities/QuickLoanModel.dart';
 import '../../../Services/SqlService.dart';
-import '../../../component/ui/constraint-ui.dart';
+import '../../../component/collection/add/info-widget.dart';
+import '../../../component/customer/customer-search.dart';
+import '../../../component/ui/text-wrapper.dart';
 
 class CollectionAddWidget extends StatefulWidget {
   const CollectionAddWidget({super.key});
@@ -14,69 +15,47 @@ class CollectionAddWidget extends StatefulWidget {
 }
 
 class _CollectionAddWidgetState extends State<CollectionAddWidget> {
-  SQLService service = SQLService();
+  final SQLService service = SQLService();
+  TransactionReportModel? info;
   Future<PostResponse> saveCollection(CollectionModel collectionModel) async {
     var response = await service.saveCollection(collectionModel);
     return response;
   }
 
-  onCustomerSelect(customer) {
-    print(customer);
+  onCustomerSelect(customer) async {
+    if (customer == null) {
+      info = null;
+    }
+    if (customer != null) {
+      await fetchLoanDetails(customer);
+    }
+  }
+
+  fetchLoanDetails(customer) async {
+    var response = await service.getLoanListFromCid(customer.id);
+    if (response["success"]) {
+      return (response["data"] as List<Map<String, Object?>>)
+          .map<LoanModel>((x) => LoanModel.fromJson(x))
+          .toList();
+    }
   }
 
   @override
   Widget build(BuildContext context) {
     return Padding(
         padding: const EdgeInsets.all(10),
-        child: Wrap(
+        child: Column(
           children: [
-            ConstraintUI(
-              child: CustomerSearchField(onSelected: onCustomerSelect),
-            )
+            Expanded(child: CustomerSearchField(onSelected: onCustomerSelect)),
+            if (info == null)
+              const Expanded(
+                  flex: 4, child: BoldTextWrapper("Select a customer"))
+            else
+              Expanded(flex: 4, child: InfoWidget(details: info!))
           ],
         ));
   }
 }
-
-// class CustomerInfoView extends StatelessWidget {
-//   final CustomerModel _customerModel;
-
-//   const CustomerInfoView(this._customerModel, {super.key});
-
-//   @override
-//   Widget build(BuildContext context) {
-//     return SingleChildScrollView(
-//       child: Column(
-//         crossAxisAlignment: CrossAxisAlignment.end,
-//         children: [
-//           Flex(
-//             direction: Axis.horizontal,
-//             children: [
-//               Expanded(
-//                   child: TextFieldForm(
-//                 "Customer Id",
-//                 initialValue: _customerModel.id.toString(),
-//                 enabled: false,
-//               )),
-//               Expanded(
-//                   child: TextFieldForm(
-//                 "Customer Name",
-//                 initialValue: _customerModel.name,
-//                 enabled: false,
-//               )),
-//               Expanded(
-//                   child: TextFieldForm(
-//                 "Customer Mobile Number",
-//                 initialValue: _customerModel.mobile,
-//                 enabled: false,
-//               ))
-//             ],
-//           ),
-//         ],
-//       ),
-//     );
-//   }
-// }
 
 // // ignore: must_be_immutable
 // class LoanInfoView extends StatelessWidget {

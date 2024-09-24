@@ -249,25 +249,30 @@ order by [date] DESC;
   }
 
   // Get Loan Report Between two Date
-  Future<List<DateWiseCollectionReportModel>?> getLoanReportBwDates(
-      String? start, String? close) async {
+  Future<dynamic> getLoanReportBwDates(String? start, String? close) async {
     try {
       if (database == null) throw Exception("No database found");
-      if (start == null || close == null) return null;
+      if (start == null || close == null) {
+        return {"success": "false", "message": "Invalid Date inputs"};
+      }
       var data = await database?.rawQuery('''
-      SELECT Customer.id as cid,Customer.name,Loan.id as loanId,Loan.amount,Loan.startDate as collectionDate FROM Loan
+      SELECT Customer.id as customerId,Customer.name customerName,Loan.id as loanId,Loan.amount,Loan.startDate as startDate,loan.disbursementDate as disbursementDate FROM Loan
       LEFT JOIN Customer on Loan.cid=Customer.id
-      where Loan.startDate BETWEEN "$start" and "$close"
-      Order By startDate DESC,Loan.id DESC;
+      where date(Loan.disbursementDate) BETWEEN date("$start") and date("$close")
+      Order By disbursementDate DESC,Loan.id DESC;
         ''');
 
-      if (data == null || data.isEmpty) return null;
+      if (data == null || data.isEmpty) {
+        return {"success": false, "message": "No data found"};
+      }
 
-      return data
-          .map((e) => DateWiseCollectionReportModel.fromJson(e))
-          .toList();
+      return {
+        "success": true,
+        "data":
+            data.map((e) => DateWiseCollectionReportModel.fromJson(e)).toList()
+      };
     } catch (e) {
-      // log(e.toString());
+      log(e.toString());
       return null;
     }
   }
@@ -316,7 +321,7 @@ order by [date] DESC;
   }
 
 //  Get LoanList from CID that are active
-  Future<List<LoanModel>?> getLoanListFromCid(int cid) async {
+  Future<dynamic> getLoanListFromCid(int cid) async {
     try {
       if (database == null) throw Exception("No database found");
       var data = await database?.rawQuery('''
@@ -349,12 +354,13 @@ order by [date] DESC;
       end as overdue
       from Coll;
 ''');
-      if (data == null || data.isEmpty) return null;
-      // log(data.toString());
-      return data.map((e) => LoanModel.fromJson(e)).toList();
+      if (data == null || data.isEmpty) {
+        return {"success": false, "message": "No Active Loan Found"};
+      }
+      return {"success": true, "data": data};
     } catch (e) {
       log(e.toString());
-      return null;
+      return {"success": false, "message": "Unexpected error occured"};
     }
   }
 
@@ -389,23 +395,23 @@ order by [date] DESC;
     if (name.isEmpty) return null;
     var data = await database?.rawQuery('''
           Select * from Customer c
-          where c.name like '${name.toUpperCase()}%'; 
+          where c.name like '${name.toUpperCase()}%';
       ''');
     if (data == null || data.isEmpty) return null;
 
     return data.map((e) => CustomerModel.fromJson(e)..exist = true).toList();
   }
 
-  Future<List<CustomerModel>?> searchCustomerForActiveLoan(String name) async {
-    if (database == null) throw Exception("No database found");
-    var data = await database?.rawQuery('''
-          Select * from Customer c
-          where c.name like '%${name.toUpperCase()}%' and c.active=1; 
-      ''');
-    if (data == null || data.isEmpty) return null;
+  // Future<List<CustomerModel>?> searchCustomerForActiveLoan(String name) async {
+  //   if (database == null) throw Exception("No database found");
+  //   var data = await database?.rawQuery('''
+  //         Select * from Customer c
+  //         where c.name like '%${name.toUpperCase()}%' and c.active=1;
+  //     ''');
+  //   if (data == null || data.isEmpty) return null;
 
-    return data.map((e) => CustomerModel.fromJson(e)..exist = true).toList();
-  }
+  //   return data.map((e) => CustomerModel.fromJson(e)..exist = true).toList();
+  // }
 
   // Close a Loan
   Future<PostResponse> CloseLoan(int loanId) async {
@@ -459,58 +465,6 @@ order by [date] DESC;
       return PostResponse(false, error: "Failed to save Collection");
     }
     return PostResponse(true, msg: "Collection Saved");
-  }
-
-// Save Loan Information
-  Future<dynamic> saveNewLoan(Map<String, dynamic> value) async {
-    if (database == null) throw Exception("No database found");
-    try {
-      // transaction to save customer then loan
-      await database?.transaction((txn) async {
-        var customer = CustomerModel.fromJson(value);
-        int cid = await txn.insert("Customer", customer.toMap());
-        if (cid == 0) {
-          return {"success": false, "message": "Customer Already Exist"};
-        }
-
-        var loan = LoanModel.fromJson(value);
-        loan.cid = cid;
-        // print(loan.toMap());
-        var data = await txn.insert("Loan", loan.toMap(),
-            conflictAlgorithm: ConflictAlgorithm.rollback);
-        if (data == 0) {
-          return {"success": false, "message": "Failed to  save Data"};
-        }
-      });
-      return {"success": true, "message": "Customer Saved Successfull"};
-    } catch (_) {
-      return {
-        "success": false,
-        "message": "Something went wrong while saving loan"
-      };
-    }
-  }
-
-//  Save Loan for Existing  Information
-  Future<dynamic> saveExistingCustomerLoan(Map<String, dynamic> value) async {
-    if (database == null) throw Exception("No database found");
-    try {
-      // transaction to save customer then loan
-      await database?.transaction((txn) async {
-        var loan = LoanModel.fromJson(value);
-        var data = await txn.insert("Loan", loan.toMap(),
-            conflictAlgorithm: ConflictAlgorithm.rollback);
-        if (data == 0) {
-          return {"success": false, "message": "Failed to  save Data"};
-        }
-      });
-      return {"success": true, "message": "Customer Saved Successfull"};
-    } catch (_) {
-      return {
-        "success": false,
-        "message": "Something went wrong while saving loan"
-      };
-    }
   }
 
   Future<dynamic> deleteLoan(int? loanId) async {
@@ -675,6 +629,58 @@ order by [date] DESC;
       GROUP by l.id ;
     ''');
       return {"success": true, "data": loanInfo};
+    }
+  }
+
+// Save new customer Loan Information
+  Future<dynamic> saveNewLoan(Map<String, dynamic> value) async {
+    if (database == null) throw Exception("No database found");
+    try {
+      // transaction to save customer then loan
+      await database?.transaction((txn) async {
+        var customer = CustomerModel.fromJson(value);
+        int cid = await txn.insert("Customer", customer.toMap());
+        if (cid == 0) {
+          return {"success": false, "message": "Customer Already Exist"};
+        }
+
+        var loan = LoanModel.fromJson(value);
+        loan.cid = cid;
+        // print(loan.toMap());
+        var data = await txn.insert("Loan", loan.toMap(),
+            conflictAlgorithm: ConflictAlgorithm.rollback);
+        if (data == 0) {
+          return {"success": false, "message": "Failed to  save Data"};
+        }
+      });
+      return {"success": true, "message": "Loan Saved Successfull"};
+    } catch (_) {
+      return {
+        "success": false,
+        "message": "Something went wrong while saving loan"
+      };
+    }
+  }
+
+//  Save Loan for Existing  Information
+  Future<dynamic> saveExistingCustomerLoan(Map<String, dynamic> value) async {
+    if (database == null) throw Exception("No database found");
+    try {
+      // transaction to save customer then loan
+      await database?.transaction((txn) async {
+        var loan = LoanModel.fromJson(value);
+        var data = await txn.insert("Loan", loan.toMap(),
+            conflictAlgorithm: ConflictAlgorithm.rollback);
+        if (data == 0) {
+          return {"success": false, "message": "Failed to  save Data"};
+        }
+      });
+      return {"success": true, "message": "Loan Saved Successfull"};
+    } catch (_) {
+      return {
+        "success": false,
+        "message": "Something went wrong while saving loan"
+      };
     }
   }
 }

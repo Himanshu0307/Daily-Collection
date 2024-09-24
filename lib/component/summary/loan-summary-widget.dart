@@ -96,11 +96,6 @@ class _LoanListState extends State<LoanSummary> {
           child: FutureBuilder(
               future: fetchData(filter),
               builder: (context, fdata) {
-                if (fdata.hasError) {
-                  print(fdata.error);
-                  return const BoldTextWrapper(
-                      "Something went wrong while getting data");
-                }
                 if (fdata.connectionState == ConnectionState.waiting) {
                   return const Center(
                     child: CircularProgressIndicator(),
@@ -110,6 +105,11 @@ class _LoanListState extends State<LoanSummary> {
                   // return Container();
                   return LoanTable(
                       pdfkey: pdfkey, data: fdata.data as LoanDataSource);
+                }
+                if (fdata.hasError) {
+                  print(fdata.error);
+                  return const BoldTextWrapper(
+                      "Something went wrong while getting data");
                 }
 
                 return const SizedBox();

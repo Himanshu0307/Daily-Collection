@@ -1,6 +1,6 @@
 import 'dart:ui';
 import 'package:daily_collection/Services/PasswordService.dart';
-import 'package:daily_collection/UI/MainPage/MainPageScreen.dart';
+import 'package:daily_collection/app/main-screen.dart';
 import 'package:flutter/material.dart';
 
 class PasswordScreen extends StatefulWidget {

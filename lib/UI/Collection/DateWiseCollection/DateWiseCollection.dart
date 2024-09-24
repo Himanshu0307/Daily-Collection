@@ -3,7 +3,6 @@ import 'package:daily_collection/UI/Component/CalendarPicker.dart';
 import 'package:flutter/material.dart';
 import 'package:daily_collection/Services/SqlService.dart';
 
-
 class DateWiseCollectionReport extends StatefulWidget {
   const DateWiseCollectionReport({super.key});
 
@@ -105,16 +104,17 @@ class ListItems extends StatelessWidget {
     return ListView.builder(
       itemCount: items.length,
       itemBuilder: (context, index) {
-        return Card(
-          child: ListTile(
-            leading: Text("Loan Id: ${items[index].loanId} ",
-                textScaler: const TextScaler.linear(1.3)),
-            title: Text("${items[index].name}(${items[index].cid})"),
-            trailing: Text("${items[index].amount} Rs.",
-                textScaler: const TextScaler.linear(1.5)),
-            subtitle: Text(items[index].collectionDate),
-          ),
-        );
+        // return Card(
+        //   child: ListTile(
+        //     leading: Text("Loan Id: ${items[index].loanId} ",
+        //         textScaler: const TextScaler.linear(1.3)),
+        //     title: Text("${items[index].name}(${items[index].cid})"),
+        //     trailing: Text("${items[index].amount} Rs.",
+        //         textScaler: const TextScaler.linear(1.5)),
+        //     subtitle: Text(items[index].collectionDate),
+        //   ),
+        // );
+        return Container();
       },
     );
   }

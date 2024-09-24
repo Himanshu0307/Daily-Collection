@@ -6,10 +6,10 @@ import 'package:daily_collection/UI/Start/MainPage.dart';
 import 'package:flutter/material.dart';
 import 'package:toastification/toastification.dart';
 
-import 'UI/Collection/CollectionScreen.dart';
 import 'UI/Customer/CustomerScreen.dart';
+import 'app/collection/collection-screen.dart';
 import 'app/summary/loan-screen.dart';
-import 'UI/MainPage/MainPageScreen.dart';
+import 'app/main-screen.dart';
 
 void main() {
   runApp(const MyApp());

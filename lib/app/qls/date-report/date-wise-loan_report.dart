@@ -3,6 +3,8 @@ import 'package:daily_collection/UI/Component/CalendarPicker.dart';
 import 'package:flutter/material.dart';
 import 'package:daily_collection/Services/SqlService.dart';
 
+import '../../../component/qls/date-report/date-report-table.dart';
+import '../../../data-source/dbwiseLoanData.dart';
 
 class DateWiseLoanReport extends StatefulWidget {
   const DateWiseLoanReport({super.key});
@@ -15,9 +17,7 @@ class _DateWiseLoanReportState extends State<DateWiseLoanReport> {
   SQLService service = SQLService();
   late TextEditingController start;
   late TextEditingController close;
-
-  List<DateWiseCollectionReportModel>? _list;
-
+  DbLoanDataSource? _dataSource;
   @override
   initState() {
     super.initState();
@@ -32,16 +32,18 @@ class _DateWiseLoanReportState extends State<DateWiseLoanReport> {
     super.dispose();
   }
 
-  Future<List<DateWiseCollectionReportModel>?> searchCollectionDetail(
-      String? startDate, String? closeDate) async {
-    if (startDate == null || closeDate == null) return null;
-    return await service.getLoanReportBwDates(startDate, closeDate);
-  }
-
-  showSnackBar(BuildContext context, String message) {
-    ScaffoldMessenger.of(context).clearSnackBars();
-    ScaffoldMessenger.of(context)
-        .showSnackBar(SnackBar(content: Text(message)));
+  searchLoanDetail() async {
+    if (start.text.isEmpty || close.text.isEmpty) return null;
+    var response = await service.getLoanReportBwDates(start.text, close.text);
+    print(response);
+    if (response["success"]) {
+      var data = response["data"];
+      setState(() {
+        _dataSource = DbLoanDataSource(loans: data);
+      });
+    } else {
+      // TODO: Add Toast
+    }
   }
 
   @override
@@ -62,13 +64,7 @@ class _DateWiseLoanReportState extends State<DateWiseLoanReport> {
                 child: Padding(
               padding: const EdgeInsets.all(8.0),
               child: ElevatedButton(
-                  child: const Text("Search"),
-                  onPressed: () async {
-                    searchCollectionDetail(start.text, close.text).then(
-                        (value) => value == null
-                            ? showSnackBar(context, "No Data Found")
-                            : setState(() => _list = value));
-                  }),
+                  onPressed: searchLoanDetail, child: const Text("Search")),
             )),
             Expanded(
                 child: Padding(
@@ -77,7 +73,7 @@ class _DateWiseLoanReportState extends State<DateWiseLoanReport> {
                 child: const Text("Clear"),
                 onPressed: () {
                   setState(() {
-                    _list = null;
+                    _dataSource = null;
                   });
                 },
               ),
@@ -86,35 +82,12 @@ class _DateWiseLoanReportState extends State<DateWiseLoanReport> {
         )),
         Expanded(
             flex: 4,
-            child: _list == null || _list!.isEmpty
+            child: _dataSource == null
                 ? const Text("No Data to Display")
-                : ListItems(_list!)),
+                : DateWiseLoanTable(
+                    data: _dataSource!,
+                  )),
       ],
-    );
-  }
-}
-
-class ListItems extends StatelessWidget {
-  const ListItems(this.items, {super.key});
-
-  final List<DateWiseCollectionReportModel> items;
-
-  @override
-  Widget build(BuildContext context) {
-    return ListView.builder(
-      itemCount: items.length,
-      itemBuilder: (context, index) {
-        return Card(
-          child: ListTile(
-            leading: Text("Loan Id: ${items[index].loanId} ",
-                textScaler: const TextScaler.linear(1.3)),
-            title: Text("${items[index].name}(${items[index].cid})"),
-            trailing: Text("${items[index].amount} Rs.",
-                textScaler: const TextScaler.linear(1.5)),
-            subtitle: Text(items[index].collectionDate),
-          ),
-        );
-      },
     );
   }
 }

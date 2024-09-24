@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+
 import '../../Models/SideItem.dart';
 import '../../component/side-menubar.dart/side-menu-screen.dart';
 import 'add-collection/collection-add.dart';
@@ -12,7 +13,7 @@ class CollectionScreen extends StatelessWidget {
     _controller.jumpToPage(id);
   }
 
-  List<SideItem> items = [
+  final List<SideItem> items = [
     SideItem("Add Collection", Icons.add),
     SideItem("Collection Report A/c Loan ID", Icons.edit_document),
     SideItem("Collection Report A/c Date", Icons.calendar_month_outlined),

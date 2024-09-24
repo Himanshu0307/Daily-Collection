@@ -1,4 +1,4 @@
-import 'package:daily_collection/UI/QuickLoan/DateWiseLoan/DateWiseLoanReport.dart';
+import 'package:daily_collection/app/qls/date-report/date-wise-loan_report.dart';
 import 'package:daily_collection/app/qls/get-loan/loan-report.dart';
 import 'package:daily_collection/app/qls/add-loan/quickloan-screen.dart';
 import 'package:flutter/material.dart';
@@ -17,7 +17,7 @@ class QuickLoanMainScreen extends StatelessWidget {
   List<SideItem> items = [
     SideItem("Add Loan", Icons.add),
     SideItem("Loan Information A/c Loan Id", Icons.edit_document),
-    SideItem("Loan Report A/c Date", Icons.calendar_month_outlined),
+    SideItem("Disbursement Report", Icons.calendar_month_outlined),
     // SideItem("Loan Closure", Icons.delete)
   ];
   @override
@@ -32,7 +32,11 @@ class QuickLoanMainScreen extends StatelessWidget {
               pageSnapping: true,
               controller: _controller,
               allowImplicitScrolling: false,
-              children: const [QuickLoanScreen(), LoanReport(), DateWiseLoanReport()],
+              children: const [
+                QuickLoanScreen(),
+                LoanReport(),
+                DateWiseLoanReport()
+              ],
             )),
       ],
     ));

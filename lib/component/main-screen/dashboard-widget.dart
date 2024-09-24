@@ -18,7 +18,6 @@ class _DashboardWidgetState extends State<DashboardWidget> {
         future: service.getDashBoardData(),
         builder: (context, snap) {
           if (snap.connectionState == ConnectionState.done) {
-            // if (snap.data == null) return SizedBox();
             return Card(
               child: Padding(
                 padding: const EdgeInsets.all(8.0),
