@@ -1,10 +1,11 @@
-import 'package:daily_collection/Services/Cashbook.dart';
 import 'package:flutter/material.dart';
 
 import '../Models/MainItems.dart';
+import '../Services/Cashbook.dart';
 import '../Services/SqlService.dart';
 import '../component/main-screen/dashboard-widget.dart';
 import '../UI/MainPage/ListItemWidget.dart';
+import '../component/ui/sidebar/sidebar.dart';
 
 class MainPageScreen extends StatelessWidget {
   const MainPageScreen({super.key});
@@ -21,31 +22,15 @@ class MainPageScreen extends StatelessWidget {
 }
 
 class MainScreenWidget extends StatelessWidget {
-  MainScreenWidget({super.key});
+  const MainScreenWidget({super.key});
   final listItem = mainItem;
 
   @override
   Widget build(BuildContext context) {
-    return Row(
+    return const Row(
       children: [
-        Expanded(
-          child: Center(
-            child: Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: GridView(
-                gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                    crossAxisCount: 3,
-                    childAspectRatio: 4,
-                    mainAxisSpacing: 60,
-                    crossAxisSpacing: 30),
-                children: [
-                  ...listItem.map((e) => ListItemWidget(e)),
-                ],
-              ),
-            ),
-          ),
-        ),
-        const Expanded(child: DashboardWidget())
+        SizedBox(width: 50, child: Sidebar()),
+        Expanded(flex: 5, child: DashboardWidget())
       ],
     );
   }

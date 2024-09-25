@@ -136,30 +136,34 @@ END;
   }
 
   // Get List of All Transaction
-  Future<List<ListItemModel>?> getTransactionList(int loanId) async {
+  Future<dynamic> getTransactionList(int loanId) async {
     try {
       if (database == null) throw Exception("No database found");
       var data = await database?.rawQuery('''
-      
         Select * from (
         SELECT c.amount,'CR' as [type],c.collectionDate as [date],c.id FROM Collection c where c.loanId=$loanId
         UNION ALL
-        SELECT l.amount,'DR' as [type],l.startDate as [date],l.id from Loan l WHERE l.id=$loanId
+        SELECT l.amount,'DR' as [type],l.disbursementDate as [date],l.id from Loan l WHERE l.id=$loanId
         ) a
         order by [date] asc,[type]Desc;
         ''');
-      if (data == null || data.isEmpty) return null;
+      if (data == null || data.isEmpty) {
+        return {"success": false, "message": "No data found"};
+      }
       int previous = 0;
-      return data.map((e) {
-        var item = ListItemModel.fromJson(e);
-        item.totalPaidAmounttillDate =
-            item.type == "CR" ? (previous + item.amount) : 0;
-        previous = item.totalPaidAmounttillDate;
-        return item;
-      }).toList();
+      return {
+        "success": true,
+        "data": data.map((e) {
+          var item = ListItemModel.fromJson(e);
+          item.totalPaidAmounttillDate =
+              item.type == "CR" ? (previous + item.amount) : 0;
+          previous = item.totalPaidAmounttillDate;
+          return item;
+        }).toList()
+      };
     } catch (e) {
       // log(e.toString());
-      return null;
+      return {"success": false, "message": "Unexpected Error occured."};
     }
   }
 

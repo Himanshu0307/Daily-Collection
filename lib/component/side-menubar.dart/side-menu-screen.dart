@@ -1,9 +1,5 @@
-import 'dart:io';
-
 import 'package:flutter/material.dart';
-
 import '../../Models/SideItem.dart';
-import '../../app/main-screen.dart';
 
 class SideWidget extends StatefulWidget {
   final List<SideItem> items;
@@ -32,53 +28,28 @@ class _SideWidgetState extends State<SideWidget> {
         selectedIndex = widget.controller.page?.toInt() ?? 0;
       });
 
-  Text? getTextWidget(String txt, BoxConstraints constraint) {
-    return constraint.maxWidth > 150 ? Text(txt) : null;
+  onNavigationSelector(int index, BuildContext context) {
+    if (index == 0) {
+      Navigator.of(context).pop();
+    } else {
+      widget.controller.animateToPage(index - 1,
+          duration: const Duration(seconds: 1), curve: Curves.ease);
+    }
   }
 
   int selectedIndex = 0;
+
   @override
   Widget build(BuildContext context) {
-    return LayoutBuilder(builder: (context, constraint) {
-      return ColoredBox(
-        color: Colors.black87,
-        child: Column(
-          children: [
-            Expanded(
-              flex: 1,
-              child: GestureDetector(
-                onTap: () {
-                  Navigator.of(context)
-                      .popUntil(ModalRoute.withName(MainPageScreen.routeName));
-                },
-                child: Card(
-                    child: ListTile(
-                  leading: const Icon(Icons.home),
-                  title: getTextWidget('Main Menu', constraint),
-                )),
-              ),
-            ),
-            Expanded(
-              flex: 6,
-              child: ListView.builder(
-                itemBuilder: (ctx, ind) => GestureDetector(
-                  onTap: () {
-                    widget.controller.jumpToPage(ind);
-                  },
-                  child: Card(
-                      child: ListTile(
-                    textColor: selectedIndex == ind ? Colors.purple : null,
-                    iconColor: selectedIndex == ind ? Colors.purple : null,
-                    leading: Icon(widget.items[ind].icon),
-                    title: getTextWidget(widget.items[ind].name, constraint),
-                  )),
-                ),
-                itemCount: widget.items.length,
-              ),
-            ),
-          ],
-        ),
-      );
-    });
+    return NavigationRail(
+        onDestinationSelected: (ind) => onNavigationSelector(ind, context),
+        labelType: NavigationRailLabelType.selected,
+        destinations: [
+          const NavigationRailDestination(
+              icon: Icon(Icons.home), label: Text("Main Menu")),
+          ...widget.items.map((x) => NavigationRailDestination(
+              icon: Icon(x.icon), label: Text(x.name)))
+        ],
+        selectedIndex: selectedIndex + 1);
   }
 }

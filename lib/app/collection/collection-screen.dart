@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import '../../Models/SideItem.dart';
 import '../../component/side-menubar.dart/side-menu-screen.dart';
 import 'add-collection/collection-add.dart';
+import 'get-collection/report-widget.dart';
 
 
 class CollectionScreen extends StatelessWidget {
@@ -34,7 +35,7 @@ class CollectionScreen extends StatelessWidget {
               allowImplicitScrolling: false,
               children: const [
                 CollectionAddWidget(),
-                // CollectionReport(),
+                CollectionReport(),
                 // DateWiseCollectionReport(),
                 // TransactionReportDateWise(),
               ],
