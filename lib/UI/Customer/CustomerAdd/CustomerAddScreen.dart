@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:daily_collection/Models/SQL%20Entities/QuickLoanModel.dart';
 
-import '../../../Services/SqlService.dart';
+import '../../../services/SqlService.dart';
 import '../../Component/TextFieldForm.dart';
 
 class CustomerAddWidgetForm extends StatefulWidget {

@@ -5,7 +5,7 @@ import 'package:daily_collection/UI/Component/CalendarPicker.dart';
 import 'package:daily_collection/UI/Component/DropdownWIdget.dart';
 import 'package:flutter/material.dart';
 
-import '../../../Services/PartnerService.dart';
+import '../../../services/PartnerService.dart';
 import '../../Component/TextFieldForm.dart';
 
 class PartnerAddTransactionForm extends StatefulWidget {

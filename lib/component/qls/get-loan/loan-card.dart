@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 import '../../../Models/SQL Entities/QuickLoanModel.dart';
-import '../../../Services/SqlService.dart';
+import '../../../services/SqlService.dart';
 import '../../../utils/toast-exception.dart';
 import '../../ui/constraint-ui.dart';
 

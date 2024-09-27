@@ -1,4 +1,4 @@
-import 'package:daily_collection/Services/PartnerService.dart';
+import 'package:daily_collection/services/PartnerService.dart';
 import 'package:daily_collection/UI/Partner/AddTransaction/PartnerTransaction.dart';
 import 'package:flutter/material.dart';
 

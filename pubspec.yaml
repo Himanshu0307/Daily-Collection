@@ -47,6 +47,7 @@ dependencies:
   toastification: ^2.2.0
   syncfusion_flutter_datagrid: ^26.2.14
   syncfusion_flutter_datagrid_export: ^26.2.14
+  fl_chart: ^0.69.0
 
 dev_dependencies:
   flutter_test:

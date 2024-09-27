@@ -1,6 +1,6 @@
 import 'package:daily_collection/Models/PartnersModel/PartnersModel.dart';
 import 'package:daily_collection/Models/PostResponse.dart';
-import 'package:daily_collection/Services/PartnerService.dart';
+import 'package:daily_collection/services/PartnerService.dart';
 import 'package:flutter/material.dart';
 
 import '../../Component/TextFieldForm.dart';

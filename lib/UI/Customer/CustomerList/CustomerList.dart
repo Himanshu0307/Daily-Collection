@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import '../../../Services/SqlService.dart';
+import '../../../services/SqlService.dart';
 import '../../Component/TableComponent.dart';
 
 class CustomerList extends StatelessWidget {

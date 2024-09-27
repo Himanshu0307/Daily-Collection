@@ -9,7 +9,7 @@ import 'package:syncfusion_flutter_datagrid/datagrid.dart';
 import 'package:syncfusion_flutter_datagrid_export/export.dart';
 
 import '../../Models/SQL Entities/QuickLoanModel.dart';
-import '../../Services/SqlService.dart';
+import '../../services/SqlService.dart';
 import '../../data-source/loan-data-source.dart';
 import '../ui/constraint-ui.dart';
 

@@ -1,5 +1,5 @@
 import 'package:daily_collection/Models/SQL%20Entities/QuickLoanModel.dart';
-import 'package:daily_collection/Services/SqlService.dart';
+import 'package:daily_collection/services/SqlService.dart';
 import 'package:daily_collection/component/customer/customer-search.dart';
 import 'package:daily_collection/component/ui/autocomplete.dart';
 import 'package:daily_collection/utils/object-wrapper.dart';

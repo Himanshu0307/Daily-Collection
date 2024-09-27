@@ -2,9 +2,10 @@ import 'package:flutter/material.dart';
 
 import '../../Models/SideItem.dart';
 import '../../component/side-menubar.dart/side-menu-screen.dart';
+import '../../component/ui/inner-sidebar.dart';
 import 'add-collection/collection-add.dart';
+import 'date-report/datewise-collection-report.dart';
 import 'get-collection/report-widget.dart';
-
 
 class CollectionScreen extends StatelessWidget {
   static const String routeName = "CollectionScreen";
@@ -15,20 +16,17 @@ class CollectionScreen extends StatelessWidget {
   }
 
   final List<SideItem> items = [
-    SideItem("Add Collection", Icons.add),
-    SideItem("Collection Report A/c Loan ID", Icons.edit_document),
-    SideItem("Collection Report A/c Date", Icons.calendar_month_outlined),
-    SideItem("Transaction Report A/c Date", Icons.calendar_month_outlined),
+    SideItem("Deposite", Icons.add),
+    SideItem("Collection Report", Icons.edit_document),
+    SideItem("Total Collection Report", Icons.calendar_month_outlined),
+    SideItem("DR/CR Report", Icons.preview),
     // SideItem("Loan Closure", Icons.delete)
   ];
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        body: Row(
-      children: [
-        Expanded(flex: 1, child: SideWidget(items, _controller)),
-        Expanded(
-            flex: 3,
+        body: InnerSidebarWrapper(
+            sideWidget: SideWidget(items, _controller),
             child: PageView(
               pageSnapping: false,
               controller: _controller,
@@ -36,11 +34,9 @@ class CollectionScreen extends StatelessWidget {
               children: const [
                 CollectionAddWidget(),
                 CollectionReport(),
-                // DateWiseCollectionReport(),
+                DateWiseCollectionReport(),
                 // TransactionReportDateWise(),
               ],
-            )),
-      ],
-    ));
+            )));
   }
 }

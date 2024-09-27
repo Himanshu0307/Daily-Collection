@@ -1,8 +1,9 @@
+import 'package:daily_collection/app/dashboard/dashboard.dart';
 import 'package:flutter/material.dart';
 
 import '../Models/MainItems.dart';
-import '../Services/Cashbook.dart';
-import '../Services/SqlService.dart';
+import '../services/Cashbook.dart';
+import '../services/SqlService.dart';
 import '../component/main-screen/dashboard-widget.dart';
 import '../UI/MainPage/ListItemWidget.dart';
 import '../component/ui/sidebar/sidebar.dart';
@@ -30,7 +31,7 @@ class MainScreenWidget extends StatelessWidget {
     return const Row(
       children: [
         SizedBox(width: 50, child: Sidebar()),
-        Expanded(flex: 5, child: DashboardWidget())
+        Expanded(flex: 5, child: Dashboard())
       ],
     );
   }

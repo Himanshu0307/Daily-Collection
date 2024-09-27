@@ -1,6 +1,6 @@
 import 'package:daily_collection/UI/CashBook/CashbookScreen.dart';
 import 'package:daily_collection/UI/Partner/PartnerScreen.dart';
-import 'package:daily_collection/UI/QuickLoan/QuickLoanMainScreen.dart';
+import 'package:daily_collection/app/qls/qls-mainscreen.dart';
 import 'package:flutter/material.dart';
 
 import '../UI/Customer/CustomerScreen.dart';

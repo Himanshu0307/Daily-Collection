@@ -1,7 +1,7 @@
 import 'package:daily_collection/UI/Password/CreatePasswordPopup.dart';
 import 'package:flutter/material.dart';
 
-import '../../Services/SqlService.dart';
+import '../../services/SqlService.dart';
 
 class DashboardWidget extends StatefulWidget {
   const DashboardWidget({super.key});

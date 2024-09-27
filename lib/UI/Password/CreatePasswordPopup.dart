@@ -1,4 +1,4 @@
-import 'package:daily_collection/Services/PasswordService.dart';
+import 'package:daily_collection/services/PasswordService.dart';
 import 'package:flutter/material.dart';
 
 void showPasswordPopup(BuildContext context) {

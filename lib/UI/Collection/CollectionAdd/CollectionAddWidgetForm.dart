@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:daily_collection/Models/SQL%20Entities/QuickLoanModel.dart';
 
 import '../../../Models/PostResponse.dart';
-import '../../../Services/SqlService.dart';
+import '../../../services/SqlService.dart';
 import '../../Component/CalendarPicker.dart';
 import '../../Component/CustomerSearchnew.dart';
 import '../../Component/DropdownWIdget.dart';

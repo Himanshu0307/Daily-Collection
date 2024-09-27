@@ -1,6 +1,6 @@
 import 'package:daily_collection/Models/SQL%20Entities/QuickLoanModel.dart';
 import 'package:flutter/material.dart';
-import 'package:daily_collection/Services/SqlService.dart';
+import 'package:daily_collection/services/SqlService.dart';
 import 'package:daily_collection/UI/Component/TextFieldForm.dart';
 
 import '../../../Models/ListItem.dart';

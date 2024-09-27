@@ -32,8 +32,9 @@ class _SideWidgetState extends State<SideWidget> {
     if (index == 0) {
       Navigator.of(context).pop();
     } else {
-      widget.controller.animateToPage(index - 1,
-          duration: const Duration(seconds: 1), curve: Curves.ease);
+      widget.controller.jumpToPage(
+        index - 1,
+      );
     }
   }
 

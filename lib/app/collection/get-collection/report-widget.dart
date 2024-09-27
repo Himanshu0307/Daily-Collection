@@ -2,7 +2,7 @@ import 'package:daily_collection/data-source/collection-datasource.dart';
 import 'package:flutter/material.dart';
 
 import '../../../Models/SQL Entities/QuickLoanModel.dart';
-import '../../../Services/SqlService.dart';
+import '../../../services/SqlService.dart';
 import '../../../UI/Component/TextFieldForm.dart';
 import '../../../component/collection/get/report-table.dart';
 import '../../../component/ui/constraint-ui.dart';

@@ -1,7 +1,7 @@
 import 'package:daily_collection/UI/CashBook/CashbookScreen.dart';
 import 'package:daily_collection/UI/Partner/PartnerScreen.dart';
 import 'package:daily_collection/UI/Password/PasswordFile.dart';
-import 'package:daily_collection/UI/QuickLoan/QuickLoanMainScreen.dart';
+import 'package:daily_collection/app/qls/qls-mainscreen.dart';
 import 'package:daily_collection/UI/Start/MainPage.dart';
 import 'package:flutter/material.dart';
 import 'package:toastification/toastification.dart';

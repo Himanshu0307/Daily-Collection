@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 
 import '../../../Models/PostResponse.dart';
 import '../../../Models/SQL Entities/QuickLoanModel.dart';
-import '../../../Services/SqlService.dart';
+import '../../../services/SqlService.dart';
 import '../../../component/collection/add/info-widget.dart';
 import '../../../component/customer/customer-search.dart';
 import '../../../component/ui/text-wrapper.dart';

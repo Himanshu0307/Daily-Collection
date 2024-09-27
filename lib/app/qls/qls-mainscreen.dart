@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 
 import '../../Models/SideItem.dart';
 import '../../component/side-menubar.dart/side-menu-screen.dart';
+import '../../component/ui/inner-sidebar.dart';
 
 class QuickLoanMainScreen extends StatelessWidget {
   static const String routeName = "QuickLoanMainScreen";
@@ -15,30 +16,22 @@ class QuickLoanMainScreen extends StatelessWidget {
   }
 
   List<SideItem> items = [
-    SideItem("Add Loan", Icons.add),
-    SideItem("Loan Information A/c Loan Id", Icons.edit_document),
+    SideItem("New Loan", Icons.add),
+    SideItem("Loan Report", Icons.edit_document),
     SideItem("Disbursement Report", Icons.calendar_month_outlined),
     // SideItem("Loan Closure", Icons.delete)
   ];
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        body: Row(
-      children: [
-        Expanded(flex: 1, child: SideWidget(items, _controller)),
-        Expanded(
-            flex: 3,
-            child: PageView(
-              pageSnapping: true,
-              controller: _controller,
-              allowImplicitScrolling: false,
-              children: const [
-                QuickLoanScreen(),
-                LoanReport(),
-                DateWiseLoanReport()
-              ],
-            )),
-      ],
+        body: InnerSidebarWrapper(
+      sideWidget: SideWidget(items, _controller),
+      child: PageView(
+        pageSnapping: true,
+        controller: _controller,
+        allowImplicitScrolling: false,
+        children: const [QuickLoanScreen(), LoanReport(), DateWiseLoanReport()],
+      ),
     ));
   }
 }
