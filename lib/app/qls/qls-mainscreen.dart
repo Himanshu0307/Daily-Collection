@@ -16,8 +16,8 @@ class QuickLoanMainScreen extends StatelessWidget {
   }
 
   List<SideItem> items = [
-    SideItem("New Loan", Icons.add),
-    SideItem("Loan Report", Icons.edit_document),
+    SideItem("New", Icons.add),
+    SideItem("Details", Icons.edit_document),
     SideItem("Disbursement Report", Icons.calendar_month_outlined),
     // SideItem("Loan Closure", Icons.delete)
   ];

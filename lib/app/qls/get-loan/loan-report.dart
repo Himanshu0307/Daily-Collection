@@ -63,8 +63,7 @@ class _LoanReportState extends State<LoanReport> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Expanded(
-            child: Wrap(
+        Wrap(
           crossAxisAlignment: WrapCrossAlignment.center,
           spacing: 30,
           runSpacing: 30,
@@ -85,7 +84,7 @@ class _LoanReportState extends State<LoanReport> {
               child: const Text("Clear"),
             ))
           ],
-        )),
+        ),
         Expanded(
           flex: 4,
           child: _loanInfo == null

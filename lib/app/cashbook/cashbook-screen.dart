@@ -1,9 +1,10 @@
-import 'package:daily_collection/UI/CashBook/CashbookAdd/CashbookAddForm.dart';
+import 'package:daily_collection/app/cashbook/add-form/cashbook-add-form.dart';
 import 'package:daily_collection/UI/CashBook/CashbookInfo/CashbookList.dart';
 import 'package:flutter/material.dart';
 
 import '../../Models/SideItem.dart';
 import '../../component/side-menubar.dart/side-menu-screen.dart';
+import '../../component/ui/inner-sidebar.dart';
 
 class CashBookScreen extends StatelessWidget {
   static const String routeName = "CashBookScreen";
@@ -19,18 +20,16 @@ class CashBookScreen extends StatelessWidget {
   ];
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-        body: Row(
-      children: [
-        Expanded(flex: 1, child: SideWidget(items, _controller)),
-        Expanded(
-            flex: 3,
+    return  Scaffold(
+        body: InnerSidebarWrapper(
+            sideWidget: SideWidget(items, _controller),
             child: PageView(
               controller: _controller,
               allowImplicitScrolling: false,
-              children: const [CashBookAddForm(), CashbookList()],
-            )),
-      ],
-    ));
+              children: const [
+               CashBookAddForm(),
+                
+              ],
+            )));;
   }
 }

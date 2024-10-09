@@ -1,7 +1,12 @@
 import 'package:daily_collection/Models/SQL%20Entities/QuickLoanModel.dart';
 import 'package:daily_collection/UI/Component/CalendarPicker.dart';
+import 'package:daily_collection/component/collection/dbreport/collection-table.dart';
+import 'package:daily_collection/component/ui/text-wrapper.dart';
 import 'package:flutter/material.dart';
 import 'package:daily_collection/services/SqlService.dart';
+
+import '../../../component/ui/constraint-ui.dart';
+import '../../../data-source/dbwise-collection-datasource.dart';
 
 class DateWiseCollectionReport extends StatefulWidget {
   const DateWiseCollectionReport({super.key});
@@ -15,8 +20,7 @@ class _DateWiseCollectionReportState extends State<DateWiseCollectionReport> {
   SQLService service = SQLService();
   late TextEditingController start;
   late TextEditingController close;
-
-  List<DateWiseCollectionReportModel>? _list;
+  DbCollectionDatasource? _list;
 
   @override
   initState() {
@@ -32,90 +36,52 @@ class _DateWiseCollectionReportState extends State<DateWiseCollectionReport> {
     super.dispose();
   }
 
-  Future<List<DateWiseCollectionReportModel>?> searchCollectionDetail(
-      String? startDate, String? closeDate) async {
+  void searchCollectionDetail(String? startDate, String? closeDate) async {
     if (startDate == null || closeDate == null) return null;
-    return await service.getCollectionReportBwDates(startDate, closeDate);
+    var response =
+        await service.getCollectionReportBwDates(startDate, closeDate);
+    if (response["success"]) {
+      _list = DbCollectionDatasource(
+          list: response["data"]! as List<DateWiseCollectionReportModel>);
+    }
+    setState(() {});
   }
 
-  showSnackBar(BuildContext context, String message) {
-    ScaffoldMessenger.of(context).clearSnackBars();
-    ScaffoldMessenger.of(context)
-        .showSnackBar(SnackBar(content: Text(message)));
+  onClear() {
+    setState(() {
+      _list = null;
+    });
   }
 
   @override
   Widget build(BuildContext context) {
-    return Flex(
-      direction: Axis.vertical,
+    return Column(
       children: [
-        Expanded(
-            child: Row(
+        Wrap(
+          spacing: 20,
+          runSpacing: 20,
+          crossAxisAlignment: WrapCrossAlignment.center,
           children: [
-            Expanded(
+            ConstraintUI(
                 child: CalendarPicker(
                     "Enter Start Date", (p0) => start.text = p0)),
-            Expanded(
+            ConstraintUI(
                 child:
                     CalendarPicker("Enter End Date", (p0) => close.text = p0)),
-            Expanded(
-                child: Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: ElevatedButton(
-                  child: const Text("Search"),
-                  onPressed: () async {
-                    searchCollectionDetail(start.text, close.text).then(
-                        (value) => value == null
-                            ? showSnackBar(context, "No Data Found")
-                            : setState(() => _list = value));
-                  }),
-            )),
-            Expanded(
-                child: Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: ElevatedButton(
-                child: const Text("Clear"),
-                onPressed: () {
-                  setState(() {
-                    _list = null;
-                  });
-                },
-              ),
-            ))
+            ConstraintUI(
+                child: ElevatedButton(
+                    child: const Text("Search"),
+                    onPressed: () =>
+                        searchCollectionDetail(start.text, close.text))),
+            ConstraintUI(
+                child: ElevatedButton(
+                    onPressed: onClear, child: const Text("Clear")))
           ],
-        )),
-        Expanded(
-            flex: 4,
-            child: _list == null || _list!.isEmpty
-                ? const Text("No Data to Display")
-                : ListItems(_list!)),
+        ),
+        _list == null
+            ? const BoldTextWrapper("Select a Date ")
+            : Expanded(child: DbCollectionTable(data: _list!))
       ],
-    );
-  }
-}
-
-class ListItems extends StatelessWidget {
-  const ListItems(this.items, {super.key});
-
-  final List<DateWiseCollectionReportModel> items;
-
-  @override
-  Widget build(BuildContext context) {
-    return ListView.builder(
-      itemCount: items.length,
-      itemBuilder: (context, index) {
-        // return Card(
-        //   child: ListTile(
-        //     leading: Text("Loan Id: ${items[index].loanId} ",
-        //         textScaler: const TextScaler.linear(1.3)),
-        //     title: Text("${items[index].name}(${items[index].cid})"),
-        //     trailing: Text("${items[index].amount} Rs.",
-        //         textScaler: const TextScaler.linear(1.5)),
-        //     subtitle: Text(items[index].collectionDate),
-        //   ),
-        // );
-        return Container();
-      },
     );
   }
 }

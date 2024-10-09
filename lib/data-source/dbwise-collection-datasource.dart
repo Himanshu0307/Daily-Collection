@@ -3,10 +3,10 @@ import 'package:syncfusion_flutter_datagrid/datagrid.dart';
 
 import '../Models/SQL Entities/QuickLoanModel.dart';
 
-class DbLoanDataSource extends DataGridSource {
-  DbLoanDataSource({required List<DateWiseLoanReportModel> loans}) {
+class DbCollectionDatasource extends DataGridSource {
+  DbCollectionDatasource({required List<DateWiseCollectionReportModel> list}) {
     int index = 0;
-    dataGridRows = loans.map<DataGridRow>((dataGridRow) {
+    dataGridRows = list.map<DataGridRow>((dataGridRow) {
       index += 1;
       return DataGridRow(cells: [
         DataGridCell(columnName: "sno", value: index),
@@ -16,22 +16,11 @@ class DbLoanDataSource extends DataGridSource {
         DataGridCell<String>(
             columnName: 'customerName', value: dataGridRow.customerName),
         DataGridCell<int>(columnName: 'amount', value: dataGridRow.amount),
-      DataGridCell<String>(
-            columnName: 'startDate', value: dataGridRow.startDate),
         DataGridCell<String>(
-            columnName: 'disbursementDate',
-            value: dataGridRow.disbursementDate),
-       
+            columnName: 'collectionDate', value: dataGridRow.collectionDate),
       ]);
     }).toList();
   }
-
-  var col = [
-    "sno",
-    "loanId",
-    "customerId",
-    "amount",
-  ];
 
   List<DataGridRow> dataGridRows = [];
 
@@ -43,9 +32,7 @@ class DbLoanDataSource extends DataGridSource {
     return DataGridRowAdapter(
         cells: row.getCells().map<Widget>((dataGridCell) {
       return Container(
-          alignment: (col.contains(dataGridCell.columnName))
-              ? Alignment.centerRight
-              : Alignment.centerLeft,
+          alignment: Alignment.centerLeft,
           padding: const EdgeInsets.symmetric(horizontal: 16.0),
           child: Text(
             dataGridCell.value.toString(),

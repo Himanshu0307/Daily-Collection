@@ -76,14 +76,20 @@ END;
   }
 
   // Get List of all Customer
-  Future<List<CustomerModel>?> getCustomerList() async {
-    if (database == null) throw Exception("No database found");
-    var data = await database?.query('Customer', orderBy: "id DESC");
+  Future<dynamic> getCustomerList() async {
+    try {
+      if (database == null) throw Exception("No database found");
+      var data = await database?.query('Customer', orderBy: "id DESC");
 
-    if (data == null || data.isEmpty) return null;
-
-    var customer = data.map((e) => CustomerModel.fromJson(e)).toList();
-    return Future.value(customer);
+      if (data == null || data.isEmpty) {
+        return {"success": false, "message": "No Data Found"};
+      }
+      var customer = data.map((e) => CustomerModel.fromJson(e)).toList();
+      return {"success": true, "data": customer};
+    } catch (e) {
+      log(e.toString());
+      return {"success": false, "message": "Unexprected error occured"};
+    }
   }
 
   // // Get Customer from LoanId
@@ -195,24 +201,32 @@ END;
   }
 
   // Get Collection Report Between two Date
-  Future<List<DateWiseCollectionReportModel>?> getCollectionReportBwDates(
-      String? start, String? close) async {
+  getCollectionReportBwDates(String? start, String? close) async {
     try {
       if (database == null) throw Exception("No database found");
-      if (start == null || close == null) return null;
+      if (start == null || close == null) {
+        return {
+          "success": false,
+          "message": "Invalid start Date or close Date"
+        };
+      }
       var data = await database?.rawQuery('''
-      SELECT Customer.id as cid,Customer.name,Loan.id as loanId,Collection.amount,Collection.collectionDate  FROM Collection
+      SELECT Customer.id as customerId,Customer.name customerName,Loan.id as loanId,Collection.amount,Collection.collectionDate FROM Collection
       left JOIN Loan on Collection.loanId=Loan.id
       LEFT JOIN Customer on Loan.cid=Customer.id
-      where Collection.collectionDate BETWEEN "$start" and "$close"
+      where date(Collection.collectionDate) BETWEEN date("$start") and date("$close")
       Order By collectionDate DESC;
         ''');
 
-      if (data == null || data.isEmpty) return null;
+      if (data == null || data.isEmpty) {
+        return {"success": false, "message": "No data found"};
+      }
 
-      return data
-          .map((e) => DateWiseCollectionReportModel.fromJson(e))
-          .toList();
+      return {
+        "success": true,
+        "data":
+            data.map((e) => DateWiseCollectionReportModel.fromJson(e)).toList()
+      };
     } catch (e) {
       // log(e.toString());
       return null;
@@ -273,7 +287,7 @@ order by [date] DESC;
       return {
         "success": true,
         "data":
-            data.map((e) => DateWiseCollectionReportModel.fromJson(e)).toList()
+            data.map((e) => DateWiseLoanReportModel.fromJson(e)).toList()
       };
     } catch (e) {
       log(e.toString());
@@ -326,6 +340,49 @@ order by [date] DESC;
 
 //  Get LoanList from CID that are active
   Future<dynamic> getLoanListFromCid(int cid) async {
+    try {
+      if (database == null) throw Exception("No database found");
+      var data = await database?.rawQuery('''
+      WITH Coll as (
+      Select l.id as id,
+      c.id as cid,
+      c.name as customerName,
+      c.mobile as mobile,
+      l.amount as amount,
+      agreedAmount as 'agreedAmount',
+      installement as 'installement',
+      startDate as 'startDate',
+      endDate as 'endDate',
+      remark  as 'remark' ,
+      status as status,
+      total(cl.amount) as received
+      from Loan  l
+      left join Collection cl on cl.loanId=l.id
+      inner JOIN Customer c on c.id=l.cid and c.id=$cid
+      GROUP BY l.id
+      )
+      Select 
+      Coll.*,
+       case when Coll.status=0 then 0.0 
+      else
+      min(cast(Coll.agreedAmount as double)-Coll.received,
+      cast((julianday('now')-julianday(Coll.startDate)+1) as INTEGER )*Coll.installement -Coll.received
+      )
+      end as overdue
+      from Coll;
+''');
+      if (data == null || data.isEmpty) {
+        return {"success": false, "message": "No Active Loan Found"};
+      }
+      return {"success": true, "data": data};
+    } catch (e) {
+      log(e.toString());
+      return {"success": false, "message": "Unexpected error occured"};
+    }
+  }
+
+  // Get LoanList from CID that are active
+  Future<dynamic> getActiveLoanListFromCid(int cid) async {
     try {
       if (database == null) throw Exception("No database found");
       var data = await database?.rawQuery('''
@@ -437,18 +494,18 @@ order by [date] DESC;
   }
 
 // Save Customer Only
-  Future<PostResponse> saveCustomer(CustomerModel value) async {
+  Future<dynamic> saveCustomer(Map<String, Object?> value) async {
     if (database == null) throw Exception("No database found");
-    var data = await database?.insert("Customer", value.toMap(),
+    var data = await database?.insert("Customer", value,
         conflictAlgorithm: ConflictAlgorithm.ignore);
     if (data == null) {
-      return PostResponse(false, error: "Failed to insert Customer");
+      return {"success": false, "message": "Failed to save customer"};
     }
     if (data == 0) {
-      return PostResponse(false, error: "Customer Already Exist");
+      return {"success": false, "message": "Customer Already Exist"};
     }
 
-    return PostResponse(true, msg: "Customer Saved");
+    return {"success": true, "message": "New Customer Added"};
   }
 
 // Save Collection

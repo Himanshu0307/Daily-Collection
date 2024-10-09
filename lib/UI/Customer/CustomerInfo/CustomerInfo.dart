@@ -7,14 +7,14 @@ import '../../../services/SqlService.dart';
 
 import '../../Component/TextFieldForm.dart';
 
-class CustomerSearchReport extends StatefulWidget {
-  const CustomerSearchReport({super.key});
+class CustomerReport extends StatefulWidget {
+  const CustomerReport({super.key});
 
   @override
-  State<CustomerSearchReport> createState() => _CustomerSearchReportState();
+  State<CustomerReport> createState() => _CustomerSearchReportState();
 }
 
-class _CustomerSearchReportState extends State<CustomerSearchReport> {
+class _CustomerSearchReportState extends State<CustomerReport> {
   bool isFetching = false;
   SQLService service = SQLService();
 

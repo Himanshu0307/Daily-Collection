@@ -6,7 +6,7 @@ import 'package:daily_collection/UI/Component/CalendarPicker.dart';
 import 'package:daily_collection/UI/Component/DropdownWIdget.dart';
 import 'package:flutter/material.dart';
 
-import '../../Component/TextFieldForm.dart';
+import '../../../UI/Component/TextFieldForm.dart';
 
 class CashBookAddForm extends StatefulWidget {
   const CashBookAddForm({super.key});
@@ -91,72 +91,57 @@ class _CashBookAddFormState extends State<CashBookAddForm> {
       child: Padding(
         padding: const EdgeInsets.all(10),
         child: SingleChildScrollView(
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            crossAxisAlignment: CrossAxisAlignment.center,
+          child: Wrap(
             children: [
-              Flex(
-                direction: Axis.horizontal,
-                children: [
-                  Expanded(
-                    flex: 1,
-                    child: AutoCompleteWidget(
-                      names ?? [],
-                      onSelected: null,
-                      controller: name,
-                    ),
-                  ),
-                  Expanded(
-                    flex: 1,
-                    child: TextFieldForm("Amount",
-                        controller: amount,
-                        required: true,
-                        type: TextInputType.number),
-                  ),
-                ],
+              Expanded(
+                flex: 1,
+                child: AutoCompleteWidget(
+                  names ?? [],
+                  onSelected: null,
+                  controller: name,
+                ),
               ),
-              Row(
-                children: [
-                  Expanded(
-                      child: CalendarPicker("Date", (p0) => date.text = p0)),
-                  Expanded(
-                    child: DropdownWidget(
-                        const ["CR", "DR"], (e) => type.text = e),
-                  ),
-                ],
+              Expanded(
+                flex: 1,
+                child: TextFieldForm("Amount",
+                    controller: amount,
+                    required: true,
+                    type: TextInputType.number),
+              ),
+              Expanded(
+                  child: CalendarPicker("Date", (p0) => date.text = p0)),
+              Expanded(
+                child: DropdownWidget(
+                    const ["CR", "DR"], (e) => type.text = e),
               ),
               TextFieldForm(
                 "remark",
                 controller: remark,
               ),
-              Row(
-                children: [
-                  Expanded(
-                    child: Padding(
-                      padding: const EdgeInsets.all(8.0),
-                      child: ElevatedButton(
-                          onPressed: () {
-                            saveCash()
-                                .then((value) => value != null
-                                    ? value.success
-                                        ? showSnackBar(value.msg, context)
-                                        : showSnackBar(value.error, context)
-                                    : showSnackBar("Error", context))
-                                .then((_) => clear())
-                                .whenComplete(
-                                    () => getNameOfExistingUser());
-                          },
-                          child: const Text("Add Entry")),
-                    ),
-                  ),
-                  Expanded(
-                    child: Padding(
-                      padding: const EdgeInsets.all(8.0),
-                      child: ElevatedButton(
-                          onPressed: clear, child: const Text("Clear")),
-                    ),
-                  ),
-                ],
+              Expanded(
+                child: Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: ElevatedButton(
+                      onPressed: () {
+                        saveCash()
+                            .then((value) => value != null
+                                ? value.success
+                                    ? showSnackBar(value.msg, context)
+                                    : showSnackBar(value.error, context)
+                                : showSnackBar("Error", context))
+                            .then((_) => clear())
+                            .whenComplete(
+                                () => getNameOfExistingUser());
+                      },
+                      child: const Text("Add Entry")),
+                ),
+              ),
+              Expanded(
+                child: Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: ElevatedButton(
+                      onPressed: clear, child: const Text("Clear")),
+                ),
               )
             ],
           ),

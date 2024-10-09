@@ -4,13 +4,13 @@ import 'package:syncfusion_flutter_datagrid/datagrid.dart';
 import '../../../data-source/dbwiseLoanData.dart';
 
 class DateWiseLoanTable extends StatelessWidget {
-  DateWiseLoanTable({super.key, required this.data}) {
+  DateWiseLoanTable({super.key, required this.data, required this.pdfkey}) {
     total = data.dataGridRows
         .fold(0.0, (init, value) => init + value.getCells()[4].value);
   }
   final DbLoanDataSource data;
   var total;
-  // final GlobalKey<SfDataGridState> pdfkey;
+  final GlobalKey<SfDataGridState> pdfkey;
 
   getColumnWidget(String name) {
     return Container(
@@ -25,7 +25,7 @@ class DateWiseLoanTable extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return SfDataGrid(
-      // key: pdfkey,
+      key: pdfkey,
       source: data,
       columnWidthMode: ColumnWidthMode.fill,
       footerFrozenRowsCount: 1,

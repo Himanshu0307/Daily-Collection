@@ -93,7 +93,6 @@ class CustomerModel {
   String aadhar = "";
   String father = "";
   bool exist = false;
-  bool? active = false;
 
   CustomerModel.fromJson(Map<String, Object?> map) {
     id = map["id"] as int?;
@@ -102,9 +101,6 @@ class CustomerModel {
     mobile = map["mobile"] as String;
     address = map["address"] as String;
     father = map["father"] as String;
-    if (map.containsKey("active")) {
-      active = (map["active"] as int) == 1 ? true : false;
-    }
   }
 
   Map<String, Object?> toMap() {
@@ -195,7 +191,7 @@ class InstallementReportModel {
   }
 }
 
-class DateWiseCollectionReportModel {
+class DateWiseLoanReportModel {
   late int customerId;
   late int loanId;
   late int amount;
@@ -203,7 +199,7 @@ class DateWiseCollectionReportModel {
   late String startDate;
   late String disbursementDate;
 
-  DateWiseCollectionReportModel.fromJson(Map<String, Object?> map) {
+  DateWiseLoanReportModel.fromJson(Map<String, Object?> map) {
     customerId = map["customerId"] as int? ?? 0;
     loanId = map["loanId"] as int? ?? 0;
     amount = map["amount"] as int? ?? 0;
@@ -212,6 +208,24 @@ class DateWiseCollectionReportModel {
     disbursementDate = map["disbursementDate"] as String? ?? "";
   }
 }
+
+
+class DateWiseCollectionReportModel {
+  late int customerId;
+  late int loanId;
+  late int amount;
+  late String customerName;
+  late String collectionDate;
+
+  DateWiseCollectionReportModel.fromJson(Map<String, Object?> map) {
+    customerId = map["customerId"] as int? ?? 0;
+    loanId = map["loanId"] as int? ?? 0;
+    amount = map["amount"] as int? ?? 0;
+    customerName = map["customerName"] as String? ?? "";
+    collectionDate = map["collectionDate"] as String? ?? "";
+  }
+}
+
 
 class DateWiseTransactionReportModel {
   late double amount;
@@ -284,13 +298,10 @@ class LoanReportModel {
         received = data['received'] as double?;
 }
 
-
-class TransactionReportModel{
-     List<LoanModel> loanModel=[];
+class TransactionReportModel {
+  List<LoanModel> loanModel = [];
   late CustomerModel customerModel;
-
 }
-
 
 class ListItemModel {
   String? collectionDate;
@@ -306,4 +317,72 @@ class ListItemModel {
   }
   ListItemModel(
       {required this.collectionDate, required this.type, required this.amount});
+}
+
+class CustomerLoanReportModel {
+  final int id;
+  final int cid;
+  final String customerName;
+  final String mobile;
+  final double amount;
+  final double agreedAmount;
+  final int installment;
+  final String startDate;
+  final String endDate;
+  final String remark;
+  final int status;
+  final double received;
+  final double overdue;
+
+  CustomerLoanReportModel({
+    required this.id,
+    required this.cid,
+    required this.customerName,
+    required this.mobile,
+    required this.amount,
+    required this.agreedAmount,
+    required this.installment,
+    required this.startDate,
+    required this.endDate,
+    required this.remark,
+    required this.status,
+    required this.received,
+    required this.overdue,
+  });
+
+  factory CustomerLoanReportModel.fromJson(Map<String, dynamic> json) {
+    return CustomerLoanReportModel(
+      id: json['id'],
+      cid: json['cid'],
+      customerName: json['customerName'],
+      mobile: json['mobile'],
+      amount: json['amount'].toDouble(),
+      agreedAmount: json['agreedAmount'].toDouble(),
+      installment: json['installement'],
+      startDate:json['startDate'],
+      endDate:json['endDate'],
+      remark: json['remark'],
+      status: json['status'],
+      received: json['received'].toDouble(),
+      overdue: json['overdue'].toDouble(),
+    );
+  }
+
+  Map<String, dynamic> toJson() {
+    return {
+      'id': id,
+      'cid': cid,
+      'customerName': customerName,
+      'mobile': mobile,
+      'amount': amount,
+      'agreedAmount': agreedAmount,
+      'installement': installment,
+      'startDate': startDate,
+      'endDate': endDate,
+      'remark': remark,
+      'status': status,
+      'received': received,
+      'overdue': overdue,
+    };
+  }
 }

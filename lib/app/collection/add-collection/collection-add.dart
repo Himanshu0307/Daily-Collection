@@ -27,16 +27,22 @@ class _CollectionAddWidgetState extends State<CollectionAddWidget> {
       info = null;
     }
     if (customer != null) {
-      await fetchLoanDetails(customer);
+      List<LoanModel> listLoan = await fetchLoanDetails(customer);
+      info = TransactionReportModel()
+        ..customerModel = customer
+        ..loanModel = listLoan;
     }
+    setState(() {});
   }
 
   fetchLoanDetails(customer) async {
-    var response = await service.getLoanListFromCid(customer.id);
+    var response = await service.getActiveLoanListFromCid(customer.id);
     if (response["success"]) {
       return (response["data"] as List<Map<String, Object?>>)
           .map<LoanModel>((x) => LoanModel.fromJson(x))
           .toList();
+    } else {
+      return [];
     }
   }
 
@@ -49,9 +55,9 @@ class _CollectionAddWidgetState extends State<CollectionAddWidget> {
             Expanded(child: CustomerSearchField(onSelected: onCustomerSelect)),
             if (info == null)
               const Expanded(
-                  flex: 4, child: BoldTextWrapper("Select a customer"))
+                  flex: 3, child: BoldTextWrapper("Select a customer"))
             else
-              Expanded(flex: 4, child: InfoWidget(details: info!))
+              Expanded(flex: 3, child: InfoWidget(details: info!))
           ],
         ));
   }
