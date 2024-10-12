@@ -5,6 +5,7 @@ import 'package:daily_collection/UI/Component/TableComponent.dart';
 import 'package:flutter/material.dart';
 
 import '../../../component/ui/autocomplete.dart';
+import '../../../component/ui/constraint-ui.dart';
 
 class CashbookList extends StatefulWidget {
   const CashbookList({super.key});
@@ -58,27 +59,25 @@ class _CashbookListState extends State<CashbookList> {
 
   @override
   Widget build(BuildContext context) {
-    return Flex(
-      direction: Axis.vertical,
+    return Column(
       children: [
-        Expanded(
-            child: Row(
+        Wrap(
+          runSpacing: 20,
+          spacing: 15,
           children: [
-            Expanded(
-                child: AutoCompleteWidget(
+            AutoCompleteWidget(
               names ?? [],
               controller: name,
               onSelected: null,
-            )),
-            Expanded(
-                child: CalendarPicker(
-                    "Enter Start Date", (p0) => start.text = p0)),
-            Expanded(
+            ),
+            ConstraintUI(
+              child:
+                  CalendarPicker("Enter Start Date", (p0) => start.text = p0),
+            ),
+            ConstraintUI(
                 child:
                     CalendarPicker("Enter End Date", (p0) => close.text = p0)),
-            Expanded(
-                child: Padding(
-              padding: const EdgeInsets.all(8.0),
+            ConstraintUI(
               child: ElevatedButton(
                   child: const Text("Search"),
                   onPressed: () async {
@@ -87,10 +86,8 @@ class _CashbookListState extends State<CashbookList> {
                             ? showSnackBar(context, "No Data Found")
                             : setState(() => _list = value));
                   }),
-            )),
-            Expanded(
-                child: Padding(
-              padding: const EdgeInsets.all(8.0),
+            ),
+            ConstraintUI(
               child: ElevatedButton(
                 child: const Text("Clear"),
                 onPressed: () {
@@ -99,9 +96,9 @@ class _CashbookListState extends State<CashbookList> {
                   });
                 },
               ),
-            ))
+            ),
           ],
-        )),
+        ),
         _list != null && _list!.isNotEmpty
             ? Expanded(
                 child: Padding(

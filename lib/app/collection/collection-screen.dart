@@ -6,6 +6,7 @@ import '../../component/ui/inner-sidebar.dart';
 import 'add-collection/collection-add.dart';
 import 'date-report/datewise-collection-report.dart';
 import 'get-collection/report-widget.dart';
+import 'transaction/transaction-report.dart';
 
 class CollectionScreen extends StatelessWidget {
   static const String routeName = "CollectionScreen";
@@ -35,7 +36,7 @@ class CollectionScreen extends StatelessWidget {
                 CollectionAddWidget(),
                 CollectionReport(),
                 DateWiseCollectionReport(),
-                // TransactionReportDateWise(),
+                TransactionReportDateWise(),
               ],
             )));
   }

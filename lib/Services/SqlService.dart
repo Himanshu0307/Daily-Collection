@@ -240,12 +240,12 @@ END;
       if (database == null) throw Exception("No database found");
       if (start == null || close == null) return null;
       var data = await database?.rawQuery('''
-      WITH coll as (SELECT total(amount) as amount, collectionDate as [date],'CR' as [type],'Customer' as [to] from Collection  where collectionDate BETWEEN "$start" and "$close"  GROUP BY collectionDate ),
+      WITH coll as (SELECT total(amount) as amount, collectionDate as [date],'CR' as [type],'Customer' as [to] from Collection  where date(collectionDate) BETWEEN date("$start") and date("$close")  GROUP BY collectionDate ),
 loantemp as (
-    Select total(amount) as amount,startDate as [date], 'DR' as [type],'Customer' as [to] from Loan where startDate BETWEEN "$start" and "$close" GROUP BY startDate
+    Select total(amount) as amount,startDate as [date], 'DR' as [type],'Customer' as [to] from Loan where date(startDate) BETWEEN date("$start") and date("$close") GROUP BY startDate
     ),
 partners as(
-    SELECT total(amount) as amount,[date],[type],'Partner' as [to] from PartnerTransaction where [date] BETWEEN "$start" and "$close" GROUP BY [date],[type]
+    SELECT total(amount) as amount,[date],[type],'Partner' as [to] from PartnerTransaction where date([date]) BETWEEN date("$start") and date("$close") GROUP BY [date],[type]
     )
 Select * from coll
 UNION ALL
@@ -286,8 +286,7 @@ order by [date] DESC;
 
       return {
         "success": true,
-        "data":
-            data.map((e) => DateWiseLoanReportModel.fromJson(e)).toList()
+        "data": data.map((e) => DateWiseLoanReportModel.fromJson(e)).toList()
       };
     } catch (e) {
       log(e.toString());
@@ -388,6 +387,8 @@ order by [date] DESC;
       var data = await database?.rawQuery('''
       WITH Coll as (
       Select l.id as id,
+      l.days as days,
+      l.disbursementDate,
       c.id as cid,
       c.name as customerName,
       c.mobile as mobile,
@@ -509,7 +510,7 @@ order by [date] DESC;
   }
 
 // Save Collection
-  Future<PostResponse> saveCollection(CollectionModel value) async {
+  saveCollection(CollectionModel value) async {
     if (database == null) throw Exception("No database found");
     //check Loan Validation
     var dateStart = await database?.query("Loan",
@@ -517,15 +518,18 @@ order by [date] DESC;
     if (DateFormat("yyyy-MM-dd")
         .parse(dateStart?.first["startDate"] as String)
         .isAfter(DateFormat("yyyy-MM-dd").parse(value.collectionDate!))) {
-      return PostResponse(false,
-          error: "Collection Date can't be before loan start Date");
+      return {
+        "success": false,
+        "message": "Collection Date can't be before loan start Date"
+      };
     }
     var data = await database?.insert("Collection", value.toMap(),
         conflictAlgorithm: ConflictAlgorithm.ignore);
     if (data == null || data == 0) {
-      return PostResponse(false, error: "Failed to save Collection");
+      return {"success": false, "message": "Failed to Save Collection"};
     }
-    return PostResponse(true, msg: "Collection Saved");
+    return {"success": true, "message": "Saved Successfully"};
+    
   }
 
   Future<dynamic> deleteLoan(int? loanId) async {

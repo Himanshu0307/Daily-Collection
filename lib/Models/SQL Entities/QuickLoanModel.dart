@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 class LoanModel {
   int? id;
   int amount = 0;
@@ -21,7 +23,7 @@ class LoanModel {
       agreedAmount = json["agreedAmount"] as int;
       installement = json["installement"] as int;
       days = json["days"] as int;
-      startDate = (json["startDate"] as String);
+      startDate = json["startDate"] as String;
       endDate = json["endDate"] as String;
       remark = json["remark"] as String?;
       witnessName = json["witnessName"] as String?;
@@ -30,7 +32,10 @@ class LoanModel {
       status = true;
       disbursementDate = json["disbursementDate"] as String;
       cid = json["cid"] as int;
-    } catch (_) {}
+    } catch (err) {
+      log(err.toString());
+      // log(err.());
+    }
   }
 
   LoanModel(
@@ -66,23 +71,15 @@ class LoanModel {
       "disbursementDate": disbursementDate
     };
   }
+}
 
-  // Map<String, Object?> toTableJson() {
-  //   return {
-  //     "LoanId": id,
-  //     "CustomerId": cid,
-  //     "Name": customer?.name,
-  //     "Amount": amount,
-  //     "Agreed Amount": agreedAmount,
-  //     "Overdue": overdue,
-  //     "Installement": installement,
-  //     "Loan Tenure": days,
-  //     "Start Date": startDate,
-  //     "End Date": endDate,
-  //     "Remark": remark ?? "",
-  //     "Status": status,
-  //   };
-  // }
+
+class ELoanModel extends LoanModel{
+  double overdue=0.0;
+  ELoanModel.fromJson(json) : super.fromJson(json){
+    overdue=json["overdue"];
+  }
+  
 }
 
 class CustomerModel {
@@ -209,7 +206,6 @@ class DateWiseLoanReportModel {
   }
 }
 
-
 class DateWiseCollectionReportModel {
   late int customerId;
   late int loanId;
@@ -225,7 +221,6 @@ class DateWiseCollectionReportModel {
     collectionDate = map["collectionDate"] as String? ?? "";
   }
 }
-
 
 class DateWiseTransactionReportModel {
   late double amount;
@@ -299,8 +294,9 @@ class LoanReportModel {
 }
 
 class TransactionReportModel {
-  List<LoanModel> loanModel = [];
+  List<ELoanModel> loanModel = [];
   late CustomerModel customerModel;
+  double overdue=0.0;
 }
 
 class ListItemModel {
@@ -359,8 +355,8 @@ class CustomerLoanReportModel {
       amount: json['amount'].toDouble(),
       agreedAmount: json['agreedAmount'].toDouble(),
       installment: json['installement'],
-      startDate:json['startDate'],
-      endDate:json['endDate'],
+      startDate: json['startDate'],
+      endDate: json['endDate'],
       remark: json['remark'],
       status: json['status'],
       received: json['received'].toDouble(),

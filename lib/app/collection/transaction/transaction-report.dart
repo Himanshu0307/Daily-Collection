@@ -3,6 +3,10 @@ import 'package:daily_collection/UI/Component/CalendarPicker.dart';
 import 'package:flutter/material.dart';
 import 'package:daily_collection/services/SqlService.dart';
 
+import '../../../component/collection/transaction/transaction-table.dart';
+import '../../../component/ui/constraint-ui.dart';
+import '../../../data-source/transaction-datasource.dart';
+
 class TransactionReportDateWise extends StatefulWidget {
   const TransactionReportDateWise({super.key});
 
@@ -61,73 +65,48 @@ class _TransactionReportDateWiseState extends State<TransactionReportDateWise> {
 
   @override
   Widget build(BuildContext context) {
-    return Flex(
-      direction: Axis.vertical,
+    return Column(
       children: [
-        Expanded(
-            flex: 2,
-            child: Row(
-              children: [
-                Expanded(
-                    child: CalendarPicker(
-                        "Enter Start Date", (p0) => start.text = p0)),
-                Expanded(
-                    child: CalendarPicker(
-                        "Enter End Date", (p0) => close.text = p0)),
-                Expanded(
-                    child: Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: ElevatedButton(
-                      child: const Text("Search"),
-                      onPressed: () async {
-                        searchCollectionDetail(start.text, close.text).then(
-                            (value) => value == null
-                                ? showSnackBar(context, "No Data Found")
-                                : setState(() => _list = value));
-                      }),
-                )),
-                Expanded(
-                    child: Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: ElevatedButton(
-                    child: const Text("Clear"),
-                    onPressed: () {
-                      setState(() {
-                        _list = null;
-                      });
-                    },
-                  ),
-                ))
-              ],
+        Wrap(
+          spacing: 20,
+          runSpacing: 20,
+          crossAxisAlignment: WrapCrossAlignment.center,
+          children: [
+            ConstraintUI(
+                child: CalendarPicker(
+                    "Enter Start Date", (p0) => start.text = p0)),
+            ConstraintUI(
+                child:
+                    CalendarPicker("Enter End Date", (p0) => close.text = p0)),
+            ConstraintUI(
+                child: ElevatedButton(
+                    child: const Text("Search"),
+                    onPressed: () async {
+                      searchCollectionDetail(start.text, close.text).then(
+                          (value) => value == null
+                              ? showSnackBar(context, "No Data Found")
+                              : setState(() => _list = value));
+                    })),
+            ConstraintUI(
+                child: ElevatedButton(
+              child: const Text("Clear"),
+              onPressed: () {
+                setState(() {
+                  _list = null;
+                });
+              },
             )),
-        Expanded(
-            child: _list == null || _list!.isEmpty
-                ? const Text("")
-                : Summary(summary: calculateTotal())),
+          ],
+        ),
         Expanded(
             flex: 7,
             child: _list == null || _list!.isEmpty
                 ? const Text("No Data to Display")
-                : ListItems(_list!)),
+                : TransactionTable(
+                    data: TransactionDatasource(transaction: _list!),
+                    summary: calculateTotal(),
+                  )),
       ],
-    );
-  }
-}
-
-class Summary extends StatelessWidget {
-  const Summary({super.key, required this.summary});
-  final Map<String, double> summary;
-
-  @override
-  Widget build(BuildContext context) {
-    return Card(
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-        children: [
-          Text("Total CR: ${summary["cr"].toString()}"),
-          Text("Total DR: ${summary["dr"].toString()}")
-        ],
-      ),
     );
   }
 }

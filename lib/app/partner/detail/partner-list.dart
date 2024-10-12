@@ -1,11 +1,9 @@
-import 'package:daily_collection/Models/PartnersModel/PartnersModel.dart';
-import 'package:daily_collection/Models/SQL%20Entities/QuickLoanModel.dart';
 import 'package:flutter/material.dart';
-import 'package:daily_collection/services/SqlService.dart';
-import 'package:daily_collection/UI/Component/TextFieldForm.dart';
 
+import '../../../Models/PartnersModel/PartnersModel.dart';
+import '../../../component/ui/constraint-ui.dart';
 import '../../../services/PartnerService.dart';
-import '../../Component/CalendarPicker.dart';
+import '../../../UI/Component/CalendarPicker.dart';
 
 class PartnerReport extends StatefulWidget {
   const PartnerReport({super.key});
@@ -59,10 +57,12 @@ class _PartnerReportState extends State<PartnerReport> {
     if (names == null) return Text("No Partner Found");
     return Column(
       children: [
-        Expanded(
-            child: Row(
+        Wrap(
+          crossAxisAlignment: WrapCrossAlignment.center,
+          spacing: 20,
+          runSpacing: 20,
           children: [
-            Expanded(
+            ConstraintUI(
               child: DropdownButton(
                   borderRadius: BorderRadius.circular(50),
                   isDense: true,
@@ -85,53 +85,48 @@ class _PartnerReportState extends State<PartnerReport> {
                     });
                   }),
             ),
-            Expanded(child: CalendarPicker("Enter Date", (p0) => endDate = p0)),
-            Expanded(
-                child: Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: ElevatedButton(
-                  child: const Text("Search"),
-                  onPressed: () async {
-                    setState(() {
-                      isLoading = true;
-                    });
-                    var result =
-                        await searchPartnerDetail(selectedValue, endDate);
-                    if (result == null) {
-                      showSnackBar(context, "No Data Found");
-                    } else {
-                      var tran = service
-                          .getPartnerTransactions(selectedValue, endDate)
-                          .then((x) {
-                        setState(() {
-                          _list = x;
-                          _customerModel = result;
-                        });
-                      }).whenComplete(() => setState(() {
-                                isLoading = false;
-                              }));
-                    }
-                  }),
+            ConstraintUI(
+                child: CalendarPicker("Enter Date", (p0) => endDate = p0)),
+            ConstraintUI(
+                child: ElevatedButton(
+                    child: const Text("Search"),
+                    onPressed: () async {
+                      setState(() {
+                        isLoading = true;
+                      });
+                      var result =
+                          await searchPartnerDetail(selectedValue, endDate);
+                      if (result == null) {
+                        showSnackBar(context, "No Data Found");
+                      } else {
+                        var tran = service
+                            .getPartnerTransactions(selectedValue, endDate)
+                            .then((x) {
+                          setState(() {
+                            _list = x;
+                            _customerModel = result;
+                          });
+                        }).whenComplete(() => setState(() {
+                                  isLoading = false;
+                                }));
+                      }
+                    })),
+            ConstraintUI(
+                child: ElevatedButton(
+              child: const Text("Clear"),
+              onPressed: () {
+                setState(() {
+                  _customerModel = null;
+                  _list = null;
+                });
+              },
             )),
-            Expanded(
-                child: Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: ElevatedButton(
-                child: const Text("Clear"),
-                onPressed: () {
-                  setState(() {
-                    _list = null;
-                  });
-                },
-              ),
-            ))
           ],
-        )),
+        ),
         if (isLoading == true)
           const Center(child: CircularProgressIndicator())
         else
           Expanded(
-            flex: 4,
             child: Reports(
               items: _list,
               partnerReport: _customerModel,
@@ -156,13 +151,12 @@ class Reports extends StatelessWidget {
     return Column(
       children: [
         partnerReport != null
-            ? Expanded(
-                child: CustomerInfo(
+            ? CustomerInfo(
                 customer: partnerReport,
-              ))
+              )
             : const SizedBox(),
         items != null && items!.isNotEmpty
-            ? Expanded(flex: 5, child: ListItems(items!))
+            ? Expanded(child: ListItems(items!))
             : const SizedBox()
       ],
     );
@@ -176,12 +170,15 @@ class CustomerInfo extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Card(
-      child: Flex(direction: Axis.horizontal, children: [
-        Expanded(child: Text("Partner Name: ${_customer.name}")),
-        Expanded(child: Text("Total Credited: ${_customer.totalCr}")),
-        Expanded(child: Text("Total Debited: ${_customer.totalDr}")),
-        Expanded(child: Text("final Amount: ${_customer.finalAmount}")),
-      ]),
+      child: Padding(
+        padding: const EdgeInsets.all(8.0),
+        child: Wrap(spacing: 20, runSpacing: 20, children: [
+          Text("Partner Name: ${_customer.name}"),
+          Text("Total Credited: ${_customer.totalCr}"),
+          Text("Total Debited: ${_customer.totalDr}"),
+          Text("Final Amount: ${_customer.finalAmount}"),
+        ]),
+      ),
     );
   }
 }
@@ -207,25 +204,28 @@ class _ListItemsState extends State<ListItems> {
       itemCount: widget.items.length,
       itemBuilder: (context, index) {
         return Card(
-          child: ListTile(
-            leading: Text("Amount: ${widget.items[index].amount} Rs.",
-                textScaler: const TextScaler.linear(1.3)),
-            title: Text(widget.items[index].type == "DR"
-                ? "Debited to Partner"
-                : "Partner Credited"),
-            trailing: SizedBox(
-              width: 300,
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                children: [
-                  Text(
-                      "${widget.items[index].type == "DR" ? '-' : '+'} ${widget.items[index].amount.toString()} Rs.",
-                      textScaler: const TextScaler.linear(1.5)),
-                  Text("Remark: ${widget.items[index].remark}")
-                ],
-              ),
+          child: Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: Wrap(
+              runSpacing: 20,
+              spacing: 20,
+              children: [
+                // Text("Amount: ${widget.items[index].amount} Rs.",
+                //     textScaler: const TextScaler.linear(1.3)),
+                Text(widget.items[index].type == "DR"
+                    ? "Debited to Partner"
+                    : "Partner Credited"),
+                Text(
+                  "Amount: ${widget.items[index].type == "DR" ? '-' : '+'} ${widget.items[index].amount.toString()} Rs.",
+                  // textScaler: const TextScaler.linear(1.5)
+                ),
+                Text("Date: ${widget.items[index].date}"),
+                Text(
+                  "Remark: ${widget.items[index].remark}",
+                  overflow: TextOverflow.ellipsis,
+                ),
+              ],
             ),
-            subtitle: Text(widget.items[index].date),
           ),
         );
       },

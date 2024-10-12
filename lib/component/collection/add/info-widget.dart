@@ -11,23 +11,36 @@ class InfoWidget extends StatelessWidget {
   final TransactionReportModel details;
   @override
   Widget build(BuildContext context) {
-    return Wrap(
-      runSpacing: 20,
-      spacing: 20,
+    return Flex(
+      direction: Axis.vertical,
       children: [
         CustomerCard(
           customer: details.customerModel,
         ),
-        if (details.loanModel.isEmpty)
-          const BoldTextWrapper("No Active loan Found")
-        else
-          Column(
-            children: [
-              LoanInfo(loans: details.loanModel),
-              CollectionForm(
-                  loanIds: details.loanModel.map((x) => x.id!).toList())
-            ],
-          )
+        Expanded(
+            flex: 5,
+            child: details.loanModel.isEmpty
+                ? const BoldTextWrapper("No Active loan Found")
+                : Flex(
+                    direction: Axis.vertical,
+                    children: [
+                      Expanded(
+                          flex: 5, child: LoanInfo(loans: details.loanModel)),
+                      CollectionForm(
+                          loanIds: details.loanModel.map((x) => x.id!).toList())
+                    ],
+                  ))
+        // details.loanModel.isEmpty
+        //     ? const BoldTextWrapper("No Active loan Found")
+        //     : Column(
+        //         children: [
+        //           LoanInfo(loans: details.loanModel),
+        //           // Expanded(
+        //           //   child: CollectionForm(
+        //           //       loanIds: details.loanModel.map((x) => x.id!).toList()),
+        //           // )
+        //         ],
+        //       )
       ],
     );
   }
