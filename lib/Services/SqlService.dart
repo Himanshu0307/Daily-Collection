@@ -371,7 +371,7 @@ order by [date] DESC;
       from Coll;
 ''');
       if (data == null || data.isEmpty) {
-        return {"success": false, "message": "No Active Loan Found"};
+        return {"success": false, "message": "No Loan Found"};
       }
       return {"success": true, "data": data};
     } catch (e) {
@@ -529,7 +529,6 @@ order by [date] DESC;
       return {"success": false, "message": "Failed to Save Collection"};
     }
     return {"success": true, "message": "Saved Successfully"};
-    
   }
 
   Future<dynamic> deleteLoan(int? loanId) async {

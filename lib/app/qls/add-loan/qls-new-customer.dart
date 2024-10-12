@@ -56,7 +56,10 @@ class QLSNewLoanForm extends StatelessWidget {
     if (form.valid) {
       var response = await service.saveNewLoan(form.value);
       if (response["success"]) {
-        form.reset(updateParent: false);
+        form.reset(updateParent: false, value: {
+          "disbursementDate": DateTime.now().toString(),
+          "startDate": DateTime.now().add(const Duration(days: 1)).toString()
+        });
       }
     }
   }
@@ -231,9 +234,15 @@ class QLSNewLoanForm extends StatelessWidget {
                     child: ElevatedButton(
                         onPressed: () => {
                               form.reset(
-                                updateParent: true,
-                                emitEvent: true,
-                              )
+                                  updateParent: true,
+                                  emitEvent: true,
+                                  value: {
+                                    "disbursementDate":
+                                        DateTime.now().toString(),
+                                    "startDate": DateTime.now()
+                                        .add(const Duration(days: 1))
+                                        .toString()
+                                  })
                             },
                         child: const Text("Clear")),
                   )

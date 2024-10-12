@@ -29,7 +29,13 @@ class LoanModel {
       witnessName = json["witnessName"] as String?;
       witnessMobile = json["witnessMobile"] as String?;
       witnessAddress = json["witnessAddress"] as String?;
-      status = true;
+      status = json["status"].runtimeType == int
+          ?
+          // if 1 then true else false
+          json["status"] == 1
+              ? true
+              : false
+          : true;
       disbursementDate = json["disbursementDate"] as String;
       cid = json["cid"] as int;
     } catch (err) {
@@ -73,13 +79,11 @@ class LoanModel {
   }
 }
 
-
-class ELoanModel extends LoanModel{
-  double overdue=0.0;
-  ELoanModel.fromJson(json) : super.fromJson(json){
-    overdue=json["overdue"];
+class ELoanModel extends LoanModel {
+  double overdue = 0.0;
+  ELoanModel.fromJson(json) : super.fromJson(json) {
+    overdue = json["overdue"];
   }
-  
 }
 
 class CustomerModel {
@@ -296,7 +300,7 @@ class LoanReportModel {
 class TransactionReportModel {
   List<ELoanModel> loanModel = [];
   late CustomerModel customerModel;
-  double overdue=0.0;
+  double overdue = 0.0;
 }
 
 class ListItemModel {

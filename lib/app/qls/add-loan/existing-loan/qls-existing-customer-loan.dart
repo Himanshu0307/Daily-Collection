@@ -29,13 +29,11 @@ class _QLSExistingCustomerLoanAddState
 
   @override
   Widget build(BuildContext context) {
-    return Column(
+    return Flex(
+      direction: Axis.vertical,
       children: [
-        Expanded(
-          flex: 1,
-          child: CustomerSearchField(
-            onSelected: onCustomerSelected,
-          ),
+        CustomerSearchField(
+          onSelected: onCustomerSelected,
         ),
         Expanded(
             flex: 5,

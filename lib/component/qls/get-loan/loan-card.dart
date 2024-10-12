@@ -54,8 +54,7 @@ class LoanCard extends StatelessWidget {
             ConstraintUI(child: Text("Status: ${loanModel.status ?? ""}")),
             ConstraintUI(
                 child: ElevatedButton.icon(
-                    onPressed:
-                        loanModel.status == "Closed" ? null : onDeleteLoan,
+                    onPressed: loanModel.status == false ? null : onDeleteLoan,
                     icon: const Icon(Icons.delete),
                     label: const Text("Delete Loan"))),
           ],

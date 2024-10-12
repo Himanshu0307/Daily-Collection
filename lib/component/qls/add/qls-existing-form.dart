@@ -9,8 +9,6 @@ import '../../ui/custom-reactive-date-picker.dart';
 import 'customer-card.dart';
 
 class QLSExistingCustomerForm extends StatelessWidget {
-
-
   QLSExistingCustomerForm({super.key, required this.model});
 
   final CustomerModel model;
@@ -57,7 +55,10 @@ class QLSExistingCustomerForm extends StatelessWidget {
       if (form.valid) {
         var response = await _service.saveExistingCustomerLoan(form.value);
         if (response["success"]) {
-          form.reset(updateParent: false);
+          form.reset(updateParent: false, value: {
+            "disbursementDate": DateTime.now().toString(),
+            "startDate": DateTime.now().add(const Duration(days: 1)).toString()
+          });
         }
       }
     }

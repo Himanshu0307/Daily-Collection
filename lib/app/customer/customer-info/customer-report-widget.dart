@@ -24,7 +24,7 @@ class _CustomerReportWidgetState extends State<CustomerReportWidget> {
   onCustomerSearch(customer) async {
     if (customer != null) {
       var response = await _service.getLoanListFromCid(customer.id);
-      // log(response.toString());
+      log(response.toString());
       if (response["success"]) {
         List<CustomerLoanReportModel> report =
             (response["data"] as List<Map<String, dynamic>>)
