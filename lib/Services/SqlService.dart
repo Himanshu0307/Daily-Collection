@@ -46,6 +46,7 @@ class SQLService {
       startDate Date,
       endDate Date,
       remark TEXT,
+      disbursementDate Date,
       witnessName Text,
       witnessMobile Text,
       witnessAddress Text,
@@ -106,6 +107,7 @@ END;
   // }
 
   // Get Customer and all Active Loan Status
+  @Deprecated("The method is no longer in use")
   Future<List<LoanModel>?> getCustomerAndLoanInfo(String name) async {
     if (database == null) throw Exception("No database found");
     try {
@@ -123,6 +125,7 @@ END;
   }
 
   // Get Customer and all  Loan Status
+  @Deprecated("The method is no longer in use")
   Future<List<LoanModel>?> getCustomerAndLoanInfoIgnoreStatus(
       int? loanId) async {
     if (database == null) throw Exception("No database found");
@@ -234,8 +237,7 @@ END;
   }
 
   // Get Collection Report of ALL Transactions
-  Future<List<DateWiseTransactionReportModel>?> getTransactionReportBwDates(
-      String? start, String? close) async {
+  getTransactionReportBwDates(String? start, String? close) async {
     try {
       if (database == null) throw Exception("No database found");
       if (start == null || close == null) return null;
@@ -255,14 +257,19 @@ Select * from partners
 order by [date] DESC;
         ''');
 
-      if (data == null || data.isEmpty) return null;
+      if (data == null || data.isEmpty) {
+        return {"success": false, "message": "No Data Found"};
+      }
 
-      return data
-          .map((e) => DateWiseTransactionReportModel.fromJson(e))
-          .toList();
+      return {
+        "data": data
+            .map((e) => DateWiseTransactionReportModel.fromJson(e))
+            .toList(),
+        "success": true
+      };
     } catch (e) {
-      // log(e.toString());
-      return null;
+      log(e.toString());
+      return {"success": false, "message": "Unexpected Error Occured"};
     }
   }
 

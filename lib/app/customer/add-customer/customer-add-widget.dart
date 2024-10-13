@@ -1,11 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/material.dart';
 import 'package:reactive_forms/reactive_forms.dart';
-import '../../../Models/PostResponse.dart';
 import '../../../services/SqlService.dart';
-import '../../../utils/datetime.dart';
 import '../../../component/ui/constraint-ui.dart';
-import '../../../component/ui/custom-reactive-date-picker.dart';
+import '../../../utils/toastshow.dart';
 
 class CustomerAddWidget extends StatelessWidget {
   final SQLService service = SQLService();
@@ -30,6 +27,7 @@ class CustomerAddWidget extends StatelessWidget {
       if (response["success"]) {
         form.reset(updateParent: false);
       }
+      showToast(response["message"]);
     }
   }
 

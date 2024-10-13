@@ -36,6 +36,7 @@ class CustomReactiveDatePicker extends StatelessWidget {
             _controller.text = getFormatedDate(delegate.value.toString());
           }
 
+
           // Event for setting value in TextField if selected from Picker
           delegate.control.valueChanges.listen((newValue) {
             if (newValue == null) {
@@ -100,6 +101,7 @@ class CustomReactiveDatePicker extends StatelessWidget {
           );
         },
         firstDate: firstDate ?? DateTime(1999),
+
         lastDate: lastDate ?? DateTime(2099));
   }
 }

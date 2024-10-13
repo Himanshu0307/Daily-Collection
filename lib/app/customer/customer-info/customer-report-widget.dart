@@ -2,6 +2,7 @@ import 'dart:developer';
 
 import 'package:daily_collection/component/ui/text-wrapper.dart';
 import 'package:daily_collection/services/SqlService.dart';
+import 'package:daily_collection/utils/toastshow.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
@@ -31,6 +32,9 @@ class _CustomerReportWidgetState extends State<CustomerReportWidget> {
                 .map((x) => CustomerLoanReportModel.fromJson(x))
                 .toList();
         _datasource = CustomerLoanDataSource(transaction: report);
+      } else {
+        _datasource = null;
+        showToast(response["message"]);
       }
     } else {
       _datasource = null;

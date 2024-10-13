@@ -6,6 +6,7 @@ import 'package:daily_collection/services/SqlService.dart';
 import '../../../component/collection/transaction/transaction-table.dart';
 import '../../../component/ui/constraint-ui.dart';
 import '../../../data-source/transaction-datasource.dart';
+import '../../../utils/toastshow.dart';
 
 class TransactionReportDateWise extends StatefulWidget {
   const TransactionReportDateWise({super.key});
@@ -39,13 +40,18 @@ class _TransactionReportDateWiseState extends State<TransactionReportDateWise> {
   Future<List<DateWiseTransactionReportModel>?> searchCollectionDetail(
       String? startDate, String? closeDate) async {
     if (startDate == null || closeDate == null) return null;
-    return await service.getTransactionReportBwDates(startDate, closeDate);
-  }
-
-  showSnackBar(BuildContext context, String message) {
-    ScaffoldMessenger.of(context).clearSnackBars();
-    ScaffoldMessenger.of(context)
-        .showSnackBar(SnackBar(content: Text(message)));
+    var response =
+        await service.getTransactionReportBwDates(startDate, closeDate);
+    if (response["success"]) {
+      setState(() {
+        _list = response["data"];
+      });
+    } else {
+      setState(() {
+        _list=null;
+      });
+      showToast(response["message"]);
+    }
   }
 
   calculateTotal() {
@@ -82,10 +88,7 @@ class _TransactionReportDateWiseState extends State<TransactionReportDateWise> {
                 child: ElevatedButton(
                     child: const Text("Search"),
                     onPressed: () async {
-                      searchCollectionDetail(start.text, close.text).then(
-                          (value) => value == null
-                              ? showSnackBar(context, "No Data Found")
-                              : setState(() => _list = value));
+                      searchCollectionDetail(start.text, close.text);
                     })),
             ConstraintUI(
                 child: ElevatedButton(

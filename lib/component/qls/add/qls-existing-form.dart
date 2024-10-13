@@ -2,8 +2,10 @@ import 'package:daily_collection/Models/SQL%20Entities/QuickLoanModel.dart';
 import 'package:daily_collection/services/SqlService.dart';
 import 'package:flutter/material.dart';
 import 'package:reactive_forms/reactive_forms.dart';
+import 'package:toastification/toastification.dart';
 
 import '../../../../../utils/datetime.dart';
+import '../../../utils/toastshow.dart';
 import '../../ui/constraint-ui.dart';
 import '../../ui/custom-reactive-date-picker.dart';
 import 'customer-card.dart';
@@ -59,6 +61,7 @@ class QLSExistingCustomerForm extends StatelessWidget {
             "disbursementDate": DateTime.now().toString(),
             "startDate": DateTime.now().add(const Duration(days: 1)).toString()
           });
+          showToast(response["message"]);
         }
       }
     }

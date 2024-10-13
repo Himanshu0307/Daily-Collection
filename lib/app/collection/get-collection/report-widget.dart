@@ -8,6 +8,7 @@ import '../../../component/collection/get/report-table.dart';
 import '../../../component/ui/constraint-ui.dart';
 import '../../../component/ui/text-wrapper.dart';
 import '../../../utils/toast-exception.dart';
+import '../../../utils/toastshow.dart';
 
 class CollectionReport extends StatefulWidget {
   const CollectionReport({super.key});
@@ -54,6 +55,7 @@ class _CollectionReportState extends State<CollectionReport> {
       });
     } else {
       // TODO:Add Toast
+      showToast(response["message"]);
       clear();
     }
   }

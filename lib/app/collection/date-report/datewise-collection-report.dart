@@ -7,6 +7,7 @@ import 'package:daily_collection/services/SqlService.dart';
 
 import '../../../component/ui/constraint-ui.dart';
 import '../../../data-source/dbwise-collection-datasource.dart';
+import '../../../utils/toastshow.dart';
 
 class DateWiseCollectionReport extends StatefulWidget {
   const DateWiseCollectionReport({super.key});
@@ -43,6 +44,9 @@ class _DateWiseCollectionReportState extends State<DateWiseCollectionReport> {
     if (response["success"]) {
       _list = DbCollectionDatasource(
           list: response["data"]! as List<DateWiseCollectionReportModel>);
+    } else {
+      _list = null;
+      showToast(response["message"]);
     }
     setState(() {});
   }

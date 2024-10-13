@@ -5,6 +5,7 @@ import '../../../services/SqlService.dart';
 import '../../../UI/Component/TextFieldForm.dart';
 import '../../../component/ui/constraint-ui.dart';
 import '../../../component/ui/text-wrapper.dart';
+import '../../../utils/toastshow.dart';
 import '[id]/report-widget.dart';
 import '../../../utils/toast-exception.dart';
 
@@ -42,7 +43,7 @@ class _LoanReportState extends State<LoanReport> {
   onSearch() async {
     // if invalid loan id
     if (int.tryParse(loanIdSearch.text) == null) {
-      throw ToastException("Invalid Loan Id");
+      showToast("Invalid Loan Id");
     }
 
     // get loan information
@@ -53,7 +54,7 @@ class _LoanReportState extends State<LoanReport> {
         _loanInfo = response["data"];
       });
     } else {
-      // TODO:Add Toast
+      showToast(response["message"]);
       clear();
     }
   }

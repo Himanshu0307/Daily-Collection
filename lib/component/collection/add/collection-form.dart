@@ -4,6 +4,7 @@ import 'package:reactive_forms/reactive_forms.dart';
 
 import '../../../Models/SQL Entities/QuickLoanModel.dart';
 import '../../../services/SqlService.dart';
+import '../../../utils/toastshow.dart';
 import '../../ui/constraint-ui.dart';
 import '../../ui/custom-reactive-date-picker.dart';
 
@@ -33,15 +34,17 @@ class CollectionForm extends StatelessWidget {
     form.markAllAsTouched();
     if (form.valid) {
       // print(form.value);
-      var x=CollectionModel(
-        amount:form.value["amount"] as int, 
-        collectionDate: form.value["collectionDate"] as String,
-        loanId: form.value["loanId"] as int
-        );
+      var x = CollectionModel(
+          amount: form.value["amount"] as int,
+          collectionDate: form.value["collectionDate"] as String,
+          loanId: form.value["loanId"] as int);
       var response = await service.saveCollection(x);
       if (response["success"]) {
-        form.reset(updateParent: false);
+        form.reset(
+            updateParent: false,
+            value: {"collectionDate": DateTime.now().toIso8601String()});
       }
+      showToast(response["message"]);
     }
   }
 

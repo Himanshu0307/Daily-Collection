@@ -1,17 +1,16 @@
 import 'dart:io';
-
-import 'package:daily_collection/Models/SQL%20Entities/QuickLoanModel.dart';
-import 'package:daily_collection/UI/Component/CalendarPicker.dart';
 import 'package:flutter/material.dart';
-import 'package:daily_collection/services/SqlService.dart';
 import 'package:intl/intl.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:syncfusion_flutter_datagrid/datagrid.dart';
 import 'package:syncfusion_flutter_datagrid_export/export.dart';
 
+import '../../../UI/Component/CalendarPicker.dart';
 import '../../../component/qls/date-report/date-report-table.dart';
 import '../../../component/ui/constraint-ui.dart';
 import '../../../data-source/dbwiseLoanData.dart';
+import '../../../services/SqlService.dart';
+import '../../../utils/toastshow.dart';
 
 class DateWiseLoanReport extends StatefulWidget {
   const DateWiseLoanReport({super.key});
@@ -51,11 +50,15 @@ class _DateWiseLoanReportState extends State<DateWiseLoanReport> {
         _dataSource = DbLoanDataSource(loans: data);
       });
     } else {
+      setState(() {
+        _dataSource = null;
+      });
+      showToast(response["message"]);
       // TODO: Add Toast
     }
   }
 
-   onPdfSave() async {
+  onPdfSave() async {
     var document = pdfkey.currentState!.exportToExcelWorkbook();
     final List<int> bytes = document.saveSync();
     Directory documentpath = await getApplicationDocumentsDirectory();
@@ -65,8 +68,8 @@ class _DateWiseLoanReportState extends State<DateWiseLoanReport> {
         .writeAsBytes(bytes, flush: true);
     document.dispose();
     // TODO: add Toast
+    showToast("Document Exported to Document Folder");
   }
-
 
   @override
   Widget build(BuildContext context) {
@@ -110,10 +113,7 @@ class _DateWiseLoanReportState extends State<DateWiseLoanReport> {
             flex: 3,
             child: _dataSource == null
                 ? const Text("No Data to Display")
-                : DateWiseLoanTable(
-                    data: _dataSource!,
-                    pdfkey:pdfkey
-                  )),
+                : DateWiseLoanTable(data: _dataSource!, pdfkey: pdfkey)),
       ],
     );
   }
