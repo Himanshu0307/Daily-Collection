@@ -35,7 +35,7 @@ class CustomReactiveDatePicker extends StatelessWidget {
           if (delegate.value != null) {
             _controller.text = getFormatedDate(delegate.value.toString());
           }
-
+          
 
           // Event for setting value in TextField if selected from Picker
           delegate.control.valueChanges.listen((newValue) {

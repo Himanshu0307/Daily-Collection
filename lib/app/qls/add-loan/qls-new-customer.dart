@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import 'package:reactive_forms/reactive_forms.dart';
 import 'package:toastification/toastification.dart';
 import '../../../Models/PostResponse.dart';
@@ -66,6 +67,10 @@ class QLSNewLoanForm extends StatelessWidget {
        showToast(response["message"]);
     }
   }
+  getFormattedDate(String date) {
+  return DateFormat("yyyy-MM-dd").format(DateTime.parse(date));
+}
+
 
   getDefaultTextDecoration(String label, [String? placeholder]) {
     return InputDecoration(labelText: label, hintText: placeholder);

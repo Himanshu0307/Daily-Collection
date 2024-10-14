@@ -1,5 +1,8 @@
 import 'dart:developer';
 
+import 'package:daily_collection/utils/datetime.dart';
+import 'package:intl/intl.dart';
+
 class LoanModel {
   int? id;
   int amount = 0;
@@ -23,8 +26,8 @@ class LoanModel {
       agreedAmount = json["agreedAmount"] as int;
       installement = json["installement"] as int;
       days = json["days"] as int;
-      startDate = json["startDate"] as String;
-      endDate = json["endDate"] as String;
+      startDate = getFormattedDate(json["startDate"] as String);
+      endDate = getFormattedDate(json["endDate"] as String);
       remark = json["remark"] as String?;
       witnessName = json["witnessName"] as String?;
       witnessMobile = json["witnessMobile"] as String?;
@@ -36,7 +39,7 @@ class LoanModel {
               ? true
               : false
           : true;
-      disbursementDate = json["disbursementDate"] as String;
+      disbursementDate = getFormattedDate(json["disbursementDate"] as String);
       cid = json["cid"] as int;
     } catch (err) {
       log(err.toString());
@@ -126,10 +129,10 @@ class CustomerModel {
 
 class CollectionModel {
   int? id;
-  int? loanId;
+  int loanId;
 
-  int? amount;
-  String? collectionDate;
+  int amount;
+  String collectionDate;
 
   toMap() {
     return {
@@ -140,9 +143,15 @@ class CollectionModel {
     };
   }
 
-  CollectionModel.fromJson(Map<String, Object?> map);
+  // CollectionModel.fromJson(Map<String, Object?> map);
 
-  CollectionModel({this.id, this.loanId, this.amount, this.collectionDate});
+  CollectionModel(
+      {this.id,
+      required this.loanId,
+      required this.amount,
+      required this.collectionDate}) {
+    collectionDate = getFormattedDate(collectionDate);
+  }
 }
 
 class DashboardModel {
@@ -385,4 +394,8 @@ class CustomerLoanReportModel {
       'overdue': overdue,
     };
   }
+}
+
+getFormattedDate(String date) {
+  return DateFormat("yyyy-MM-dd").format(DateTime.parse(date));
 }

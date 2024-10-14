@@ -5,8 +5,6 @@ import 'package:intl/intl.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:path/path.dart' as p;
 import 'package:sqflite_common_ffi/sqflite_ffi.dart';
-
-import '../Models/ListItem.dart';
 import '../Models/PostResponse.dart';
 import '../Models/SQL Entities/QuickLoanModel.dart';
 
@@ -725,7 +723,8 @@ order by [date] DESC;
         }
       });
       return {"success": true, "message": "Loan Saved Successfull"};
-    } catch (_) {
+    } catch (err) {
+      log(err.toString());
       return {
         "success": false,
         "message": "Something went wrong while saving loan"
@@ -754,4 +753,8 @@ order by [date] DESC;
       };
     }
   }
+}
+
+getFormattedDate(String date) {
+  return DateFormat("yyyy-MM-dd").format(DateTime.parse(date));
 }
