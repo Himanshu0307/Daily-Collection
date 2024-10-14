@@ -19,7 +19,7 @@ const List<MainItems> mainItem = [
   MainItems(Icons.money, "Quick Loan", QuickLoanMainScreen.routeName),
   MainItems(Icons.supervised_user_circle_rounded, "Customer",
       CustomerScreen.routeName),
-  MainItems(Icons.list, "Loan View", LoanScreen.routeName),
+  MainItems(Icons.list, "Loan Summary", LoanScreen.routeName),
   MainItems(Icons.monetization_on, "Collection", CollectionScreen.routeName),
   MainItems(Icons.book, "Cashbook", CashBookScreen.routeName),
   MainItems(Icons.handshake, "Partner", PartnerScreen.routeName)

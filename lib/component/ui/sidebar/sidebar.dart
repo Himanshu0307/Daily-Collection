@@ -7,8 +7,9 @@ class Sidebar extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return NavigationRail(elevation: 3,
-    
+    return NavigationRail(
+        elevation: 3,
+        labelType: NavigationRailLabelType.all,
         destinations: [
           ...listItem.map((x) {
             return NavigationRailDestination(

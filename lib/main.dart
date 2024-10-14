@@ -22,16 +22,13 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ToastificationWrapper(
-      config:
-          const ToastificationConfig(animationDuration: Duration(seconds: 2),
-          ),
+      config: const ToastificationConfig(
+        animationDuration: Duration(seconds: 2),
+      ),
       child: MaterialApp(
         debugShowCheckedModeBanner: false,
-        title: 'Flutter Demo',
-        theme: ThemeData(
-          colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
-          useMaterial3: true,
-        ),
+        title: 'Loan Tracker',
+        theme: ThemeData.dark(useMaterial3: true),
         routes: {
           SecurityPage.route: (context) => const SecurityPage(),
           "/": (context) => const PasswordScreen(),

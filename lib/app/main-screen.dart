@@ -4,8 +4,6 @@ import 'package:flutter/material.dart';
 import '../Models/MainItems.dart';
 import '../services/Cashbook.dart';
 import '../services/SqlService.dart';
-import '../component/main-screen/dashboard-widget.dart';
-import '../UI/MainPage/ListItemWidget.dart';
 import '../component/ui/sidebar/sidebar.dart';
 
 class MainPageScreen extends StatelessWidget {
@@ -16,7 +14,8 @@ class MainPageScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     SQLService.initializeDb();
     CashBookService.initializeDb();
-    return Scaffold(
+    return const Scaffold(
+      
       body: MainScreenWidget(),
     );
   }
@@ -30,7 +29,7 @@ class MainScreenWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     return const Row(
       children: [
-        SizedBox(width: 50, child: Sidebar()),
+        SizedBox(width: 150, child: Sidebar()),
         Expanded(flex: 5, child: Dashboard())
       ],
     );
