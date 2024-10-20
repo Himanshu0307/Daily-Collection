@@ -123,24 +123,24 @@ END;
   }
 
   // Get Customer and all  Loan Status
-  @Deprecated("The method is no longer in use")
-  Future<List<LoanModel>?> getCustomerAndLoanInfoIgnoreStatus(
-      int? loanId) async {
-    if (database == null) throw Exception("No database found");
-    try {
-      if (loanId == null) return null;
-      var data = await database?.rawQuery('''
-          Select l.*,c.id as customerId,c.name customerName,c.mobile from Loan l inner join Customer c on l.cid=c.id 
-          where c.id='$loanId' 
-      ''');
-      if (data == null || data.isEmpty) return null;
-      // log("sdfsfsfsdf" + data.toString());
-      return data.map((e) => LoanModel.fromJson(e)).toList();
-    } catch (ex) {
-      log(ex.toString());
-      return null;
-    }
-  }
+  // @Deprecated("The method is no longer in use")
+  // Future<List<LoanModel>?> getCustomerAndLoanInfoIgnoreStatus(
+  //     int? loanId) async {
+  //   if (database == null) throw Exception("No database found");
+  //   try {
+  //     if (loanId == null) return null;
+  //     var data = await database?.rawQuery('''
+  //         Select l.*,c.id as customerId,c.name customerName,c.mobile from Loan l inner join Customer c on l.cid=c.id
+  //         where c.id='$loanId'
+  //     ''');
+  //     if (data == null || data.isEmpty) return null;
+  //     // log("sdfsfsfsdf" + data.toString());
+  //     return data.map((e) => LoanModel.fromJson(e)).toList();
+  //   } catch (ex) {
+  //     log(ex.toString());
+  //     return null;
+  //   }
+  // }
 
   // Get List of All Transaction
   Future<dynamic> getTransactionList(int loanId) async {
@@ -158,15 +158,19 @@ END;
         return {"success": false, "message": "No data found"};
       }
       int previous = 0;
+      var card = await getLoanReportFromId(loanId);
       return {
         "success": true,
-        "data": data.map((e) {
-          var item = ListItemModel.fromJson(e);
-          item.totalPaidAmounttillDate =
-              item.type == "CR" ? (previous + item.amount) : 0;
-          previous = item.totalPaidAmounttillDate;
-          return item;
-        }).toList()
+        "data": {
+          "transactions": data.map((e) {
+            var item = ListItemModel.fromJson(e);
+            item.totalPaidAmounttillDate =
+                item.type == "CR" ? (previous + item.amount) : 0;
+            previous = item.totalPaidAmounttillDate;
+            return item;
+          }).toList(),
+          "info": card["success"] ? card["data"] : null
+        }
       };
     } catch (e) {
       // log(e.toString());
@@ -554,7 +558,7 @@ order by [date] DESC;
     }
   }
 
-  Future<PostResponse> deleteCollection(int? id) async {
+  deleteCollection(int? id) async {
     if (database == null) throw Exception("No database found");
     if (id == null) return PostResponse(false, error: "Transaction Not found");
     try {
@@ -562,12 +566,13 @@ order by [date] DESC;
               ?.delete("Collection", where: "id=? ", whereArgs: [id]) ??
           0;
       if (value > 0) {
-        return PostResponse(true, msg: "Transaction Deleted Successfully");
+        return {"success": true, "message": "Transaction Deleted Successfully"};
       } else {
-        return PostResponse(false, error: "Failed to Delete");
+        return {"success": false, "message": "Failed to Delete"};
       }
     } catch (e) {
-      return PostResponse(false, error: "Failed to Delete Transaction");
+      log("error: $e");
+      return {"success": false, "message": "Failed to Delete Transaction"};
     }
   }
 

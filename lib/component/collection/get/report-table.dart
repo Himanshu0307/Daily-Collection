@@ -24,7 +24,9 @@ class CollectionReportTable extends StatelessWidget {
   }
 
   onPdfSave() async {
-    var document = pdfkey.currentState!.exportToExcelWorkbook();
+    var document = pdfkey.currentState!.exportToExcelWorkbook(
+      excludeColumns: ["action"],
+    );
     final List<int> bytes = document.saveSync();
     Directory documentpath = await getApplicationDocumentsDirectory();
     // print(
@@ -55,8 +57,9 @@ class CollectionReportTable extends StatelessWidget {
         GridColumn(
             columnName: 'date', label: getColumnWidget('Transaction Date')),
         GridColumn(
-            columnName: 'pending',
+            columnName: 'total',
             label: getColumnWidget('Collection Till Date')),
+        GridColumn(columnName: 'action', label: getColumnWidget('Action')),
       ],
     );
   }

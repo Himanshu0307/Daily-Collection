@@ -64,13 +64,13 @@ class QLSNewLoanForm extends StatelessWidget {
           "startDate": DateTime.now().add(const Duration(days: 1)).toString()
         });
       }
-       showToast(response["message"]);
+      showToast(response["message"]);
     }
   }
-  getFormattedDate(String date) {
-  return DateFormat("yyyy-MM-dd").format(DateTime.parse(date));
-}
 
+  getFormattedDate(String date) {
+    return DateFormat("yyyy-MM-dd").format(DateTime.parse(date));
+  }
 
   getDefaultTextDecoration(String label, [String? placeholder]) {
     return InputDecoration(labelText: label, hintText: placeholder);
@@ -150,7 +150,7 @@ class QLSNewLoanForm extends StatelessWidget {
                   ConstraintUI(
                     child: ReactiveTextField(
                       formControlName: 'father',
-                      decoration: getDefaultTextDecoration('Father'),
+                      decoration: getDefaultTextDecoration('Father Name'),
                     ),
                   ),
                   // Address

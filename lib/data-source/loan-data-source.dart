@@ -31,7 +31,9 @@ class LoanDataSource extends DataGridSource {
         DataGridCell<String>(columnName: 'remark', value: dataGridRow.remark),
         DataGridCell<String>(
             columnName: 'witnessName', value: dataGridRow.witnessName),
-        DataGridCell<bool>(columnName: 'status', value: dataGridRow.status),
+        DataGridCell<String>(
+            columnName: 'status',
+            value: dataGridRow.status == true ? "Active" : "Closed"),
       ]);
     }).toList();
   }

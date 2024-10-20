@@ -2,6 +2,7 @@ import 'package:daily_collection/data-source/collection-datasource.dart';
 import 'package:flutter/material.dart';
 
 import '../../../Models/SQL Entities/QuickLoanModel.dart';
+import '../../../component/collection/get/layout.dart';
 import '../../../services/SqlService.dart';
 import '../../../UI/Component/TextFieldForm.dart';
 import '../../../component/collection/get/report-table.dart';
@@ -21,6 +22,7 @@ class _CollectionReportState extends State<CollectionReport> {
   SQLService service = SQLService();
   late TextEditingController loanIdSearch;
   CollectionDatasource? _data;
+  LoanReportIdModel? card;
   @override
   initState() {
     super.initState();
@@ -51,7 +53,10 @@ class _CollectionReportState extends State<CollectionReport> {
         await service.getTransactionList(int.parse(loanIdSearch.text));
     if (response["success"]) {
       setState(() {
-        _data = CollectionDatasource(transaction: response["data"]);
+        card = response["data"]["info"];
+        _data = CollectionDatasource(
+            transaction: response["data"]["transactions"],
+            showDeleteButton: card?.loanModel.status ?? false);
       });
     } else {
       // TODO:Add Toast
@@ -89,10 +94,11 @@ class _CollectionReportState extends State<CollectionReport> {
           ],
         )),
         Expanded(
-          flex: 4,
+          flex: 6,
           child: _data == null
               ? const Center(child: BoldTextWrapper("Nothing to Display..."))
-              : CollectionReportTable(
+              : CollectionLayout(
+                  card: card,
                   data: _data!,
                 ),
         ),
