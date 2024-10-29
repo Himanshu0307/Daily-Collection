@@ -8,15 +8,20 @@ import '../../../utils/toastshow.dart';
 import '../../ui/constraint-ui.dart';
 import '../../ui/custom-reactive-date-picker.dart';
 
-class CollectionForm extends StatelessWidget {
-  final SQLService service = SQLService();
-
+class CollectionForm extends StatefulWidget {
   CollectionForm({super.key, required List<int> loanIds}) {
     items = loanIds
         .map((x) => DropdownMenuItem<int>(value: x, child: Text(x.toString())))
         .toList();
   }
   late List<DropdownMenuItem<int>> items;
+
+  @override
+  State<CollectionForm> createState() => _CollectionFormState();
+}
+
+class _CollectionFormState extends State<CollectionForm> {
+  final SQLService service = SQLService();
 
   final form = FormGroup({
     'loanId': FormControl<int>(validators: [Validators.required]),
@@ -41,7 +46,8 @@ class CollectionForm extends StatelessWidget {
       var response = await service.saveCollection(x);
       if (response["success"]) {
         form.reset(
-            updateParent: false,
+            updateParent: true,
+            emitEvent: true,
             value: {"collectionDate": DateTime.now().toIso8601String()});
       }
       showToast(response["message"]);
@@ -62,7 +68,7 @@ class CollectionForm extends StatelessWidget {
             child: ReactiveDropdownField(
               formControlName: 'loanId',
               // decoration: getDefaultTextDecoration('LoanId'),
-              items: items,
+              items: widget.items,
             ),
           ),
 

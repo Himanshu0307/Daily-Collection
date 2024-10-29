@@ -9,8 +9,16 @@ import '../../../component/ui/constraint-ui.dart';
 import '../../../component/ui/custom-reactive-date-picker.dart';
 import '../../../utils/toastshow.dart';
 
-class QLSNewLoanForm extends StatelessWidget {
+class QLSNewLoanForm extends StatefulWidget {
+  const QLSNewLoanForm({super.key});
+
+  @override
+  State<QLSNewLoanForm> createState() => _QLSNewLoanFormState();
+}
+
+class _QLSNewLoanFormState extends State<QLSNewLoanForm> {
   final SQLService service = SQLService();
+
   final form = FormGroup({
     'name': FormControl<String>(validators: [Validators.required]),
     'mobile': FormControl<String>(validators: [
@@ -50,8 +58,6 @@ class QLSNewLoanForm extends StatelessWidget {
     ], value: DateTime.now().toString()),
     'remark': FormControl<String>(),
   });
-
-  QLSNewLoanForm({super.key});
 
 // save a loan
   Future<void> onSaveLoan() async {

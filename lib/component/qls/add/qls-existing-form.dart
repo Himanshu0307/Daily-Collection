@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:daily_collection/Models/SQL%20Entities/QuickLoanModel.dart';
 import 'package:daily_collection/services/SqlService.dart';
 import 'package:flutter/material.dart';
@@ -10,16 +12,23 @@ import '../../ui/constraint-ui.dart';
 import '../../ui/custom-reactive-date-picker.dart';
 import 'customer-card.dart';
 
-class QLSExistingCustomerForm extends StatelessWidget {
-  QLSExistingCustomerForm({super.key, required this.model});
+class QLSExistingCustomerForm extends StatefulWidget {
+  const QLSExistingCustomerForm({super.key, required this.model});
 
   final CustomerModel model;
+
+  @override
+  State<QLSExistingCustomerForm> createState() =>
+      _QLSExistingCustomerFormState();
+}
+
+class _QLSExistingCustomerFormState extends State<QLSExistingCustomerForm> {
   final SQLService _service = SQLService();
 
   @override
   Widget build(BuildContext context) {
     final form = FormGroup({
-      'cid': FormControl<int>(value: model.id),
+      'cid': FormControl<int>(value: widget.model.id),
       'witnessName': FormControl<String>(),
       'witnessMobile': FormControl<String>(),
       'witnessAddress': FormControl<String>(),
@@ -55,9 +64,11 @@ class QLSExistingCustomerForm extends StatelessWidget {
     Future<Null> onSaveLoan() async {
       form.markAllAsTouched();
       if (form.valid) {
+        // log(form.value.toString());
         var response = await _service.saveExistingCustomerLoan(form.value);
         if (response["success"]) {
-          form.reset(updateParent: false, value: {
+          form.reset(updateParent: false, emitEvent: true, value: {
+            "cid": widget.model.id,
             "disbursementDate": DateTime.now().toString(),
             "startDate": DateTime.now().add(const Duration(days: 1)).toString()
           });
@@ -105,7 +116,7 @@ class QLSExistingCustomerForm extends StatelessWidget {
             child: Column(
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: [
-                QLSCustomerCard(model: model),
+                QLSCustomerCard(model: widget.model),
                 Wrap(
                   direction: Axis.horizontal,
                   spacing: 20,
