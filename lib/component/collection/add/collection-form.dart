@@ -23,8 +23,21 @@ class CollectionForm extends StatefulWidget {
 class _CollectionFormState extends State<CollectionForm> {
   final SQLService service = SQLService();
 
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    form.updateValue({
+      "loanId": widget.items.elementAt(0).value,
+      "collectionDate": getFormattedDateFromString(DateTime.now())
+    });
+    // form.value=widget.items.elementAt(0).value;
+  }
+
   final form = FormGroup({
-    'loanId': FormControl<int>(validators: [Validators.required]),
+    'loanId': FormControl<int>(
+      validators: [Validators.required],
+    ),
     'collectionDate': FormControl<String>(
         validators: [Validators.required],
         value: getFormattedDateFromString(DateTime.now())),
@@ -45,13 +58,17 @@ class _CollectionFormState extends State<CollectionForm> {
           loanId: form.value["loanId"] as int);
       var response = await service.saveCollection(x);
       if (response["success"]) {
-        form.reset(
-            updateParent: true,
-            emitEvent: true,
-            value: {"collectionDate": DateTime.now().toIso8601String()});
+        resetForm();
       }
       showToast(response["message"]);
     }
+  }
+
+  resetForm() {
+    form.reset(updateParent: true, emitEvent: true, value: {
+      "collectionDate": DateTime.now().toIso8601String(),
+      "loanId": widget.items.elementAt(0).value,
+    });
   }
 
   @override

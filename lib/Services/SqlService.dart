@@ -1,6 +1,7 @@
 import 'dart:developer';
 import 'dart:io';
 
+import 'package:daily_collection/utils/datetime.dart';
 import 'package:intl/intl.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:path/path.dart' as p;
@@ -154,12 +155,15 @@ END;
         ) a
         order by [date] asc,[type]Desc;
         ''');
+
       if (data == null || data.isEmpty) {
         return {"success": false, "message": "No data found"};
       }
+
+      // log(data.toString());
       int previous = 0;
       var card = await getLoanReportFromId(loanId);
-      return {
+      Map<String, dynamic> resp = {
         "success": true,
         "data": {
           "transactions": data.map((e) {
@@ -172,8 +176,27 @@ END;
           "info": card["success"] ? card["data"] : null
         }
       };
+
+      // // Add Missing Transaction value
+
+      var record =
+          (await database?.query('Loan', where: 'id=?', whereArgs: [loanId]))
+              ?.first;
+      DateTime currentDate;
+      DateTime effectiveEndDate;
+      if (record != null) {
+        currentDate = DateTime.parse(record["startDate"]!.toString());
+        effectiveEndDate = DateTime.now()
+                .isBefore(DateTime.parse(record["endDate"]!.toString()))
+            ? DateTime.now()
+            : DateTime.parse(record["endDate"]!.toString());
+        resp["data"]["transactions"] = addMissingValue(
+            currentDate, effectiveEndDate, resp["data"]["transactions"]);
+      }
+
+      return resp;
     } catch (e) {
-      // log(e.toString());
+      log(e.toString());
       return {"success": false, "message": "Unexpected Error occured."};
     }
   }
@@ -412,7 +435,7 @@ order by [date] DESC;
       from Loan  l
       left join Collection cl on cl.loanId=l.id
       inner JOIN Customer c on c.id=l.cid and c.id=$cid
-        where l.status=1
+      where l.status=1
       GROUP BY l.id
       )
       Select 
@@ -762,4 +785,58 @@ order by [date] DESC;
 
 getFormattedDate(String date) {
   return DateFormat("yyyy-MM-dd").format(DateTime.parse(date));
+}
+
+// compareDateOnly(Date){
+
+// }
+
+addMissingValue(
+    DateTime startDate, DateTime endDate, List<ListItemModel> list) {
+  try {
+    int ind1 = 1;
+    int lastpaid = 0;
+    List<ListItemModel> newList = [list[0]];
+    while (startDate.isBefore(endDate) || startDate.isAtSameMomentAs(endDate)) {
+      if (ind1 < list.length &&
+          isEqualDateOnly(
+              getDateObjectFromString(list.elementAt(ind1).collectionDate!),
+              startDate)) {
+        final rec = list.elementAt(ind1);
+        lastpaid = rec.totalPaidAmounttillDate;
+        newList.add(rec);
+        ind1 += 1;
+        if (ind1 < list.length &&
+            isEqualDateOnly(
+                getDateObjectFromString(list.elementAt(ind1).collectionDate!),
+                startDate)) {
+          continue;
+        }
+      } else {
+        newList.add(ListItemModel.fromJson({
+          'type': "CR",
+          'date': getFormattedDateFromString(startDate),
+          'id': 0,
+          'amount': 0
+        })
+          ..totalPaidAmounttillDate = lastpaid);
+      }
+      startDate = startDate.add(const Duration(days: 1));
+    }
+    // Add list missing value
+    while (ind1 < list.length) {
+      // log("Late Installement ${list.elementAt(ind1).collectionDate}");
+      // log(ind1.toString());
+      newList.add(list.elementAt(ind1));
+      ind1 += 1;
+    }
+    // log("Length of new array${newList.length}");
+    return newList;
+  } catch (e) {
+    log(e.toString());
+  }
+}
+
+bool isEqualDateOnly(DateTime d1, DateTime d2) {
+  return d1.day == d2.day && d1.month == d2.month && d1.year == d2.year;
 }

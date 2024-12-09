@@ -20,8 +20,6 @@ class CustomerDatasource extends DataGridSource {
     }).toList();
   }
 
-
-
   List<DataGridRow> dataGridRows = [];
 
   @override
@@ -32,11 +30,11 @@ class CustomerDatasource extends DataGridSource {
     return DataGridRowAdapter(
         cells: row.getCells().map<Widget>((dataGridCell) {
       return Container(
-          // alignment: Alignment.center,
+          alignment: Alignment.center,
           padding: const EdgeInsets.symmetric(horizontal: 16.0),
           child: Text(
             dataGridCell.value.toString(),
-            overflow: TextOverflow.ellipsis,
+            overflow: TextOverflow.visible,
           ));
     }).toList());
   }

@@ -27,14 +27,14 @@ class PartnerService {
     String dbPath = p.join(appDocumentsDir.path, "databases", "myDb.db");
     database = await databaseFactory.openDatabase(dbPath);
     await database?.execute('''
-  CREATE TABLE IF NOT EXISTS Partner(
+      CREATE TABLE IF NOT EXISTS Partner(
       id INTEGER PRIMARY KEY,
       name TEXT ,
       percentage double 
      )
   ''');
     await database?.execute('''
-  CREATE TABLE IF NOT EXISTS PartnerTransaction(
+      CREATE TABLE IF NOT EXISTS PartnerTransaction(
       id INTEGER PRIMARY KEY,
       partnerId INTEGER,
       amount double ,
@@ -46,7 +46,7 @@ class PartnerService {
   ''');
 
     await database?.execute('''
-  CREATE TABLE IF NOT EXISTS Config(
+       CREATE TABLE IF NOT EXISTS Config(
       id INTEGER PRIMARY KEY,
       name TEXT,
       value Text 
@@ -68,7 +68,7 @@ class PartnerService {
       // print(date);
       // print(partnerId);
       var data = await database?.rawQuery('''
-With loanc as (SELECT total(amount) as loanAmt from Loan WHERE date(Loan.startDate)<=date("${date}")),
+    With loanc as (SELECT total(amount) as loanAmt from Loan WHERE date(Loan.startDate)<=date("${date}")),
     coll as (SELECT total(amount)  as collAmt from Collection where date(collectionDate)<=date("${date}")),
     partnert as (SELECT 
     (SELECT total(amount) FROM PartnerTransaction where type=="DR" and partnerId=${partnerId} and PartnerTransaction.date<=date("${date}")) as totalDr,

@@ -28,9 +28,10 @@ class LoanDataSource extends DataGridSource {
         DataGridCell<String>(
             columnName: 'disbursementDate',
             value: dataGridRow.disbursementDate),
-        DataGridCell<String>(columnName: 'remark', value: dataGridRow.remark),
         DataGridCell<String>(
-            columnName: 'witnessName', value: dataGridRow.witnessName),
+            columnName: 'remark', value: dataGridRow.remark ?? ""),
+        DataGridCell<String>(
+            columnName: 'witnessName', value: dataGridRow.witnessName ?? ""),
         DataGridCell<String>(
             columnName: 'status',
             value: dataGridRow.status == true ? "Active" : "Closed"),
@@ -65,7 +66,7 @@ class LoanDataSource extends DataGridSource {
           padding: const EdgeInsets.symmetric(horizontal: 16.0),
           child: Text(
             dataGridCell.value.toString(),
-            overflow: TextOverflow.ellipsis,
+            overflow: TextOverflow.visible,
           ));
     }).toList());
   }
