@@ -22,6 +22,12 @@ class LoanDataSource extends DataGridSource {
         DataGridCell<int>(columnName: 'days', value: dataGridRow.days),
         DataGridCell<int>(
             columnName: 'agreedAmount', value: dataGridRow.agreedAmount),
+        DataGridCell<double>(
+            columnName: 'receivedAmount', value: dataGridRow.received ?? 0.0),
+        DataGridCell<double>(
+            columnName: 'remainingAmount',
+            value: (dataGridRow.agreedAmount!.toDouble() -
+                (dataGridRow.received!))),
         DataGridCell<String>(
             columnName: 'startDate', value: dataGridRow.startDate),
         DataGridCell<String>(columnName: 'endDate', value: dataGridRow.endDate),

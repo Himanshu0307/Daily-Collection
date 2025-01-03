@@ -51,7 +51,9 @@ class LoanCard extends StatelessWidget {
                     "Installement Amount: ${loanModel.installement ?? ""}")),
             ConstraintUI(child: Text("Loan Tenure: ${loanModel.days ?? ""}")),
             // TODO: Add Delete functionality
-            ConstraintUI(child: Text("Status: ${loanModel.status ?? ""}")),
+            ConstraintUI(
+                child: Text(
+                    "Status: ${loanModel.status == true ? 'Active' : 'Closed' ?? ""}")),
             ConstraintUI(
                 child: ElevatedButton.icon(
                     onPressed: loanModel.status == false ? null : onDeleteLoan,

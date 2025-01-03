@@ -12,6 +12,7 @@ class TransactionDatasource extends DataGridSource {
       return DataGridRow(cells: [
         DataGridCell<int>(columnName: "sno", value: index),
         DataGridCell<String>(columnName: 'type', value: dataGridRow.type),
+        DataGridCell<String>(columnName: 'to', value: dataGridRow.to),
         DataGridCell<double>(columnName: 'amount', value: dataGridRow.amount),
         DataGridCell<String>(columnName: 'date', value: dataGridRow.date),
       ]);

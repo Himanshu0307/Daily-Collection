@@ -370,7 +370,7 @@ class CustomerLoanReportModel {
       installment: json['installement'],
       startDate: json['startDate'],
       endDate: json['endDate'],
-      remark: json['remark'],
+      remark: json['remark'] ?? "",
       status: json['status'],
       received: json['received'].toDouble(),
       overdue: json['overdue'].toDouble(),

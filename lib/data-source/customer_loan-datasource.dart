@@ -24,7 +24,9 @@ class CustomerLoanDataSource extends DataGridSource {
             columnName: 'startDate', value: dataGridRow.startDate),
         DataGridCell<String>(columnName: 'endDate', value: dataGridRow.endDate),
         DataGridCell<String>(columnName: 'remark', value: dataGridRow.remark),
-        DataGridCell<int>(columnName: 'status', value: dataGridRow.status),
+        DataGridCell<String>(
+            columnName: 'status',
+            value: dataGridRow.status == 1 ? 'Active' : 'Closed'),
         DataGridCell<double>(
             columnName: 'received', value: dataGridRow.received),
         DataGridCell<double>(columnName: 'overdue', value: dataGridRow.overdue),

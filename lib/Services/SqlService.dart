@@ -211,6 +211,7 @@ END;
       WITH total as ( select total(c.amount) as received ,collectionDate as lastCollection from Collection c WHERE c.loanId=$loanId order by collectionDate desc limit 1)
       SELECT total.received,total.lastCollection,l.agreedAmount-total.received as remaining,
       case when l.status=0 then 0.0 
+      when l.agreedAmount-total.received< 2*l.installement then   l.agreedAmount-total.received< 2*l.installement
       else
       min(cast(l.agreedAmount as double)-total.received,
       cast((julianday('now')-julianday(startDate)+1) as INTEGER)*l.installement -total.received
@@ -285,6 +286,7 @@ order by [date] DESC;
       if (data == null || data.isEmpty) {
         return {"success": false, "message": "No Data Found"};
       }
+      log(data.toString());
 
       return {
         "data": data
@@ -353,6 +355,7 @@ order by [date] DESC;
       Select 
       Coll.*,
        case when Coll.status=0 then 0.0 
+       when Coll.agreedAmount -Coll.received<2*Coll.installement then Coll.agreedAmount -Coll.received
       else
       min(cast(Coll.agreedAmount as double)-Coll.received,
       cast((julianday('now')-julianday(Coll.startDate)+1) as INTEGER )*Coll.installement -Coll.received
@@ -395,6 +398,8 @@ order by [date] DESC;
       Select 
       Coll.*,
        case when Coll.status=0 then 0.0 
+        when Coll.agreedAmount -Coll.received<2*Coll.installement then Coll.agreedAmount -Coll.received
+      
       else
       min(cast(Coll.agreedAmount as double)-Coll.received,
       cast((julianday('now')-julianday(Coll.startDate)+1) as INTEGER )*Coll.installement -Coll.received
@@ -441,6 +446,8 @@ order by [date] DESC;
       Select 
       Coll.*,
        case when Coll.status=0 then 0.0 
+        when Coll.agreedAmount -Coll.received<2*Coll.installement then Coll.agreedAmount -Coll.received
+       
       else
       min(cast(Coll.agreedAmount as double)-Coll.received,
       cast((julianday('now')-julianday(Coll.startDate)+1) as INTEGER )*Coll.installement -Coll.received
@@ -638,14 +645,17 @@ order by [date] DESC;
       Select
     total(c.amount) as received,
     l.agreedAmount-total(c.amount)  as remaining,
-    (
-        min(
-          (
-              JULIANDAY(date()) - JULIANDAY(date(l.startDate)) + 1
-          ) * l.installement,
-          l.agreedAmount
-        )
-    )- total(c.amount)  as overdue,
+    case when l.status=0 then 0.0
+     when l.agreedAmount-total(c.amount)<2*l.installement then l.agreedAmount-total(c.amount)
+     else
+      (
+              min(
+                (
+                    JULIANDAY(date()) - JULIANDAY(date(l.startDate)) + 1
+                ) * l.installement,
+                l.agreedAmount
+              )
+      )- total(c.amount) end   as overdue,
     max(date(c.collectionDate)) as lastCollection
     from
         Loan l
@@ -670,6 +680,9 @@ order by [date] DESC;
     if (status == "all") {
       var loanInfo = await database?.rawQuery('''
      SELECT l.*,c.name as customerName,total(col.amount) as received,
+     case when l.status=0 then 0.0
+     when l.agreedAmount-total(col.amount)<2*l.installement then l.agreedAmount-total(col.amount)
+     else
       (
               min(
                 (
@@ -677,7 +690,7 @@ order by [date] DESC;
                 ) * l.installement,
                 l.agreedAmount
               )
-      )- total(col.amount)  as overdue
+      )- total(col.amount) end   as overdue
       FROM Loan l
       inner join Customer c on c.id=l.cid 
       left join Collection col on col.loanId=l.id
@@ -690,6 +703,9 @@ order by [date] DESC;
     else if (status == "active") {
       var loanInfo = await database?.rawQuery('''
      SELECT l.*,c.name as customerName,total(col.amount) as received,
+     case when l.status=0 then 0.0
+     when l.agreedAmount-total(col.amount)<2*l.installement then l.agreedAmount-total(col.amount)
+     else
       (
               min(
                 (
@@ -697,7 +713,7 @@ order by [date] DESC;
                 ) * l.installement,
                 l.agreedAmount
               )
-      )- total(col.amount)  as overdue
+      )- total(col.amount) end   as overdue
       FROM Loan l
       inner join Customer c on c.id=l.cid 
       left join Collection col on col.loanId=l.id
@@ -711,6 +727,9 @@ order by [date] DESC;
     else {
       var loanInfo = await database?.rawQuery('''
      SELECT l.*,c.name as customerName,total(col.amount) as received,
+      case when l.status=0 then 0.0
+     when l.agreedAmount-total(col.amount)<2*l.installement then l.agreedAmount-total(col.amount)
+     else
       (
               min(
                 (
@@ -718,7 +737,7 @@ order by [date] DESC;
                 ) * l.installement,
                 l.agreedAmount
               )
-      )- total(col.amount)  as overdue
+      )- total(col.amount) end   as overdue
       FROM Loan l
       inner join Customer c on c.id=l.cid 
       left join Collection col on col.loanId=l.id

@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:syncfusion_flutter_datagrid/datagrid.dart';
 
 class LoanTable extends StatelessWidget {
-  const LoanTable({super.key, required this.data,required this.pdfkey});
+  const LoanTable({super.key, required this.data, required this.pdfkey});
   final LoanDataSource data;
   final GlobalKey<SfDataGridState> pdfkey;
 
@@ -38,6 +38,12 @@ class LoanTable extends StatelessWidget {
         GridColumn(
             columnName: 'agreedAmount',
             label: getColumnWidget('Agreed Amount')),
+        GridColumn(
+            columnName: 'receivedAmount',
+            label: getColumnWidget('Received Amount')),
+        GridColumn(
+            columnName: 'remainingAmount',
+            label: getColumnWidget('Remaining Amount')),
         GridColumn(
             columnName: 'startDate', label: getColumnWidget('Start Date')),
         GridColumn(columnName: 'endDate', label: getColumnWidget('End Date')),

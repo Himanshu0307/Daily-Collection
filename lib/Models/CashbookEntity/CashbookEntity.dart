@@ -20,11 +20,11 @@ class CashbookModel {
 
   Map<String, Object?> toMap() {
     return {
-      "amount": amount,
-      "name": name.trim().toUpperCase(),
-      "date": date,
-      "type": type.toString(),
-      "remark": remark.toString()
+      "Amount": amount,
+      "Name": name.trim().toUpperCase(),
+      "Date": date,
+      "Type": type.toString(),
+      "Remark": remark.toString()
     };
   }
 }

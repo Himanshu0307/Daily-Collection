@@ -68,8 +68,7 @@ class CustomerReport extends StatelessWidget {
         GridColumn(columnName: 'remark', label: getColumnWidget('Remark')),
         GridColumn(columnName: 'status', label: getColumnWidget('Loan Status')),
         GridColumn(
-            columnName: 'received',
-            label: getColumnWidget('Total Amount Received')),
+            columnName: 'received', label: getColumnWidget('Received Amount')),
         GridColumn(columnName: 'overdue', label: getColumnWidget('Overdue')),
       ],
     );

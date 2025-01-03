@@ -79,6 +79,7 @@ class TransactionTable extends StatelessWidget {
       columns: [
         GridColumn(columnName: 'sno', label: getColumnWidget('Sno.')),
         GridColumn(columnName: 'type', label: getColumnWidget('CR/DR')),
+        GridColumn(columnName: 'to', label: getColumnWidget('To')),
         GridColumn(columnName: 'amount', label: getColumnWidget('Amount')),
         GridColumn(
             columnName: 'date', label: getColumnWidget('Transaction Date')),

@@ -93,55 +93,40 @@ class _CashBookAddFormState extends State<CashBookAddForm> {
         child: SingleChildScrollView(
           child: Wrap(
             children: [
-              Expanded(
-                flex: 1,
-                child: AutoCompleteWidget(
-                  names ?? [],
-                  onSelected: null,
-                  controller: name,
-                ),
+              AutoCompleteWidget(
+                names ?? [],
+                onSelected: null,
+                controller: name,
               ),
-              Expanded(
-                flex: 1,
-                child: TextFieldForm("Amount",
-                    controller: amount,
-                    required: true,
-                    type: TextInputType.number),
-              ),
-              Expanded(
-                  child: CalendarPicker("Date", (p0) => date.text = p0)),
-              Expanded(
-                child: DropdownWidget(
-                    const ["CR", "DR"], (e) => type.text = e),
-              ),
+              TextFieldForm("Amount",
+                  controller: amount,
+                  required: true,
+                  type: TextInputType.number),
+              CalendarPicker("Date", (p0) => date.text = p0),
+              DropdownWidget(const ["CR", "DR"], (e) => type.text = e),
               TextFieldForm(
                 "remark",
                 controller: remark,
               ),
-              Expanded(
-                child: Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: ElevatedButton(
-                      onPressed: () {
-                        saveCash()
-                            .then((value) => value != null
-                                ? value.success
-                                    ? showSnackBar(value.msg, context)
-                                    : showSnackBar(value.error, context)
-                                : showSnackBar("Error", context))
-                            .then((_) => clear())
-                            .whenComplete(
-                                () => getNameOfExistingUser());
-                      },
-                      child: const Text("Add Entry")),
-                ),
+              Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: ElevatedButton(
+                    onPressed: () {
+                      saveCash()
+                          .then((value) => value != null
+                              ? value.success
+                                  ? showSnackBar(value.msg, context)
+                                  : showSnackBar(value.error, context)
+                              : showSnackBar("Error", context))
+                          .then((_) => clear())
+                          .whenComplete(() => getNameOfExistingUser());
+                    },
+                    child: const Text("Add Entry")),
               ),
-              Expanded(
-                child: Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: ElevatedButton(
-                      onPressed: clear, child: const Text("Clear")),
-                ),
+              Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: ElevatedButton(
+                    onPressed: clear, child: const Text("Clear")),
               )
             ],
           ),
