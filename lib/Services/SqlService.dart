@@ -270,7 +270,7 @@ END;
       var data = await database?.rawQuery('''
       WITH coll as (SELECT total(amount) as amount, collectionDate as [date],'CR' as [type],'Customer' as [to] from Collection  where date(collectionDate) BETWEEN date("$start") and date("$close")  GROUP BY collectionDate ),
 loantemp as (
-    Select total(amount) as amount,startDate as [date], 'DR' as [type],'Customer' as [to] from Loan where date(startDate) BETWEEN date("$start") and date("$close") GROUP BY startDate
+    Select total(amount) as amount,disbursementDate as [date], 'DR' as [type],'Customer' as [to] from Loan where date(disbursementDate) BETWEEN date("$start") and date("$close") GROUP BY disbursementDate
     ),
 partners as(
     SELECT total(amount) as amount,[date],[type],'Partner' as [to] from PartnerTransaction where date([date]) BETWEEN date("$start") and date("$close") GROUP BY [date],[type]
@@ -286,7 +286,45 @@ order by [date] DESC;
       if (data == null || data.isEmpty) {
         return {"success": false, "message": "No Data Found"};
       }
-      log(data.toString());
+      // log(data.toString());
+
+      return {
+        "data": data
+            .map((e) => DateWiseTransactionReportModel.fromJson(e))
+            .toList(),
+        "success": true
+      };
+    } catch (e) {
+      log(e.toString());
+      return {"success": false, "message": "Unexpected Error Occured"};
+    }
+  }
+
+// Get Collection Report of ALL Transactions
+  getCashflowReportBwDates(String? start, String? close) async {
+    try {
+      if (database == null) throw Exception("No database found");
+      if (start == null || close == null) return null;
+      var data = await database?.rawQuery('''
+      WITH coll as (SELECT total(amount) as amount, collectionDate as [date],'CR' as [type],'Customer' as [to] from Collection  where date(collectionDate) BETWEEN date("$start") and date("$close")  GROUP BY collectionDate ),
+loantemp as (
+    Select total(amount) as amount,disbursementDate as [date], 'DR' as [type],'Customer' as [to] from Loan where date(disbursementDate) BETWEEN date("$start") and date("$close") GROUP BY disbursementDate
+    ),
+partners as(
+    SELECT total(amount) as amount,[date],[type],'Partner' as [to] from PartnerTransaction where date([date]) BETWEEN date("$start") and date("$close") GROUP BY [date],[type]
+    )
+Select * from coll
+UNION ALL
+Select * from Loantemp
+UNION ALL 
+Select * from partners
+order by [date] ;
+        ''');
+
+      if (data == null || data.isEmpty) {
+        return {"success": false, "message": "No Data Found"};
+      }
+      // log(data.toString());
 
       return {
         "data": data
@@ -690,7 +728,8 @@ order by [date] DESC;
                 ) * l.installement,
                 l.agreedAmount
               )
-      )- total(col.amount) end   as overdue
+      )- total(col.amount) end   as overdue,
+      max(col.collectionDate) as lastInstallement
       FROM Loan l
       inner join Customer c on c.id=l.cid 
       left join Collection col on col.loanId=l.id
@@ -713,7 +752,8 @@ order by [date] DESC;
                 ) * l.installement,
                 l.agreedAmount
               )
-      )- total(col.amount) end   as overdue
+      )- total(col.amount) end   as overdue,
+      max(col.collectionDate) as lastInstallement
       FROM Loan l
       inner join Customer c on c.id=l.cid 
       left join Collection col on col.loanId=l.id
@@ -737,7 +777,9 @@ order by [date] DESC;
                 ) * l.installement,
                 l.agreedAmount
               )
-      )- total(col.amount) end   as overdue
+      )- total(col.amount) end   as overdue,
+      max(col.collectionDate) as lastInstallement
+      
       FROM Loan l
       inner join Customer c on c.id=l.cid 
       left join Collection col on col.loanId=l.id

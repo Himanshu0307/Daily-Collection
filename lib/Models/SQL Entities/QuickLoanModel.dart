@@ -267,6 +267,7 @@ class LoanReportModel {
   final String? startDate;
   final String? endDate;
   final String? disbursementDate;
+  final String? lastInstallement;
   final String? remark;
   final String? witnessName;
   final bool? status;
@@ -283,6 +284,7 @@ class LoanReportModel {
       this.startDate,
       this.endDate,
       this.disbursementDate,
+      this.lastInstallement,
       this.remark,
       this.witnessName,
       this.status,
@@ -300,6 +302,7 @@ class LoanReportModel {
         startDate = data['startDate'] as String?,
         endDate = data['endDate'] as String?,
         disbursementDate = data['disbursementDate'] as String?,
+        lastInstallement = data['lastInstallement'] as String?,
         remark = data['remark'] as String?,
         witnessName = data['witnessName'] as String?,
         status = (data['status'] as int) == 1,

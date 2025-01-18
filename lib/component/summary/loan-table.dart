@@ -45,6 +45,9 @@ class LoanTable extends StatelessWidget {
             columnName: 'remainingAmount',
             label: getColumnWidget('Remaining Amount')),
         GridColumn(
+            columnName: 'lastInstallement',
+            label: getColumnWidget('Last Installement Received')),
+        GridColumn(
             columnName: 'startDate', label: getColumnWidget('Start Date')),
         GridColumn(columnName: 'endDate', label: getColumnWidget('End Date')),
         GridColumn(

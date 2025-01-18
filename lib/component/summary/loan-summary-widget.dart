@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:daily_collection/component/summary/loan-table.dart';
 import 'package:daily_collection/component/ui/text-wrapper.dart';
+import 'package:daily_collection/utils/toastshow.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:path_provider/path_provider.dart';
@@ -54,6 +55,7 @@ class _LoanListState extends State<LoanSummary> {
         .writeAsBytes(bytes, flush: true);
     document.dispose();
     // TODO: add Toast
+    showToast("Document exported to Documents Folder");
   }
 
   @override
@@ -107,7 +109,7 @@ class _LoanListState extends State<LoanSummary> {
                       pdfkey: pdfkey, data: fdata.data as LoanDataSource);
                 }
                 if (fdata.hasError) {
-                  print(fdata.error);
+                  // print(fdata.error);
                   return const BoldTextWrapper(
                       "Something went wrong while getting data");
                 }

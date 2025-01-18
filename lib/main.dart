@@ -6,6 +6,7 @@ import 'package:daily_collection/UI/Start/MainPage.dart';
 import 'package:flutter/material.dart';
 import 'package:toastification/toastification.dart';
 
+import 'app/cashflow/cashflow-screen.dart';
 import 'app/customer/customer-screen.dart';
 import 'app/collection/collection-screen.dart';
 import 'app/summary/loan-screen.dart';
@@ -34,11 +35,12 @@ class MyApp extends StatelessWidget {
           "/": (context) => const PasswordScreen(),
           QuickLoanMainScreen.routeName: (context) => QuickLoanMainScreen(),
           CustomerScreen.routeName: (context) => CustomerScreen(),
-          LoanScreen.routeName: (context) => LoanScreen(),
+          LoanScreen.routeName: (context) => const LoanScreen(),
           MainPageScreen.routeName: (context) => const MainPageScreen(),
           CashBookScreen.routeName: (context) => CashBookScreen(),
           CollectionScreen.routeName: (context) => CollectionScreen(),
-          PartnerScreen.routeName: (context) => PartnerScreen()
+          PartnerScreen.routeName: (context) => PartnerScreen(),
+          CashflowScreen.routeName: (context) => const CashflowScreen()
         },
         initialRoute: "/",
       ),
